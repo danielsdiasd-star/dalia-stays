@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\danie'' -Directory | Select-Object Name\")",
+      "Bash(powershell -Command \":*)",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\danie'' | Select-Object Name, LastWriteTime\")"
+    ]
+  }
+}

@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Proprietário — Dália Stays</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E0C06E;
+      --gold-dark:  #A8893A;
+      --green:      #1A2E2A;
+      --green-mid:  #2A4A44;
+      --off-white:  #F8F5EF;
+      --white:      #FFFFFF;
+      --gray:       #6B7280;
+      --gray-light: #E5E0D8;
+      --gray-lighter: #F3F0EA;
+      --text:       #1A1A1A;
+      --red:        #DC4C4C;
+      --blue:       #3B7DD8;
+      --purple:     #7C5CBF;
+      --teal:       #2A8C74;
+      --sidebar-w:  260px;
+      --serif:      'Playfair Display', Georgia, serif;
+      --sans:       'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--off-white);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
+    select, input { font-family: var(--sans); }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--green);
+      min-height: 100vh;
+      position: fixed;
+      top: 0; left: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-logo {
+      padding: 2rem 1.75rem 1.5rem;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .sidebar-logo span {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    .sidebar-logo small {
+      display: block;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1.5rem 0;
+    }
+
+    .nav-section {
+      padding: 0 1rem 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-top: 1rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1.75rem;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.875rem;
+      font-weight: 400;
+      transition: color 0.2s, background 0.2s;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      text-align: left;
+      background: none;
+    }
+
+    .nav-item:hover {
+      color: var(--white);
+      background: rgba(201,168,76,0.08);
+    }
+
+    .nav-item.active {
+      color: var(--gold);
+      background: rgba(201,168,76,0.12);
+      font-weight: 500;
+    }
+
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; }
+    .nav-item.active svg { opacity: 1; }
+
+    .sidebar-footer {
+      padding: 1.5rem 1.75rem;
+      border-top: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .proprietario-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .proprietario-avatar {
+      width: 36px; height: 36px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .proprietario-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .proprietario-plan {
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-light);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .topbar-date {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .badge-plano {
+      padding: 0.25rem 0.75rem;
+      background: rgba(201,168,76,0.12);
+      color: var(--gold-dark);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .section-sub {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+
+    /* ── LOADING ── */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      gap: 1rem;
+      transition: opacity 0.4s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-logo {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--green);
+      letter-spacing: 0.03em;
+    }
+
+    .loading-logo span { color: var(--gold); }
+
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--gray-light);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+
+    .kpi-card:hover { box-shadow: 0 4px 20px rgba(26,46,42,0.08); }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 0.6rem;
+    }
+
+    .kpi-value {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-delta {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+
+    .kpi-delta.up { color: var(--teal); }
+    .kpi-delta.down { color: var(--red); }
+
+    .kpi-icon {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 36px; height: 36px;
+      background: var(--off-white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kpi-icon svg { width: 18px; height: 18px; stroke: var(--gold); }
+
+    /* ── GRID 2 COLS ── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-lighter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .card-body { padding: 1.5rem; }
+
+    /* ── IMOVEIS ── */
+    .imovel-card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      transition: box-shadow 0.2s;
+      margin-bottom: 0.75rem;
+    }
+
+    .imovel-card:hover { box-shadow: 0 4px 16px rgba(26,46,42,0.08); }
+
+    .imovel-icon {
+      width: 48px; height: 48px;
+      background: rgba(201,168,76,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .imovel-icon svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; }
+
+    .imovel-info { flex: 1; min-width: 0; }
+
+    .imovel-nome {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .imovel-meta {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 0.2rem;
+    }
+
+    .imovel-plataformas {
+      display: flex;
+      gap: 0.35rem;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .imovel-receita {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .imovel-receita-valor {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .imovel-receita-label {
+      font-size: 0.7rem;
+      color: var(--gray);
+    }
+
+    /* ── STATUS BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-airbnb   { background: rgba(255,90,95,0.1);  color: #E0484D; }
+    .badge-booking  { background: rgba(0,99,191,0.1);   color: #0063BF; }
+    .badge-vrbo     { background: rgba(124,92,191,0.1); color: var(--purple); }
+    .badge-direto   { background: rgba(42,140,116,0.1); color: var(--teal); }
+    .badge-outro    { background: rgba(107,114,128,0.1);color: var(--gray); }
+
+    .badge-confirmada     { background: rgba(59,125,216,0.1);  color: var(--blue); }
+    .badge-checkin_feito  { background: rgba(201,168,76,0.1);  color: var(--gold-dark); }
+    .badge-checkout_feito { background: rgba(42,140,116,0.1);  color: var(--teal); }
+    .badge-cancelada      { background: rgba(220,76,76,0.1);   color: var(--red); }
+    .badge-pendente       { background: rgba(107,114,128,0.1); color: var(--gray); }
+
+    .badge-basico       { background: rgba(107,114,128,0.1); color: var(--gray); }
+    .badge-profissional { background: rgba(201,168,76,0.1);  color: var(--gold-dark); }
+    .badge-premium      { background: rgba(26,46,42,0.1);    color: var(--green); }
+
+    /* ── TABELA ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.825rem;
+    }
+
+    th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      background: var(--gray-lighter);
+      border-bottom: 1px solid var(--gray-light);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--gray-lighter);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(248,245,239,0.6); }
+
+    /* ── FILTROS ── */
+    .filters {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .filter-select {
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--text);
+      font-size: 0.8rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .filter-select:focus { border-color: var(--gold); }
+
+    /* ── CHECKIN LIST ── */
+    .checkin-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--gray-lighter);
+    }
+
+    .checkin-item:last-child { border-bottom: none; }
+
+    .checkin-date {
+      width: 48px; height: 48px;
+      background: var(--green);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .checkin-date .day {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .checkin-date .month {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .checkin-info { flex: 1; }
+    .checkin-hospede { font-weight: 500; font-size: 0.875rem; }
+    .checkin-imovel { font-size: 0.75rem; color: var(--gray); margin-top: 0.15rem; }
+
+    .checkin-type {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    .checkin-type.in  { background: rgba(42,140,116,0.12); color: var(--teal); }
+    .checkin-type.out { background: rgba(220,76,76,0.1);   color: var(--red); }
+
+    /* ── CHART ── */
+    .chart-container {
+      position: relative;
+      height: 280px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray);
+      font-size: 0.875rem;
+    }
+
+    .empty svg {
+      width: 40px; height: 40px;
+      stroke: var(--gray-light);
+      margin: 0 auto 0.75rem;
+      display: block;
+    }
+
+    /* ── MOBILE ── */
+    .hamburger-btn {
+      display: none;
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .hamburger-btn { display: flex; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .content { padding: 1rem; }
+      .topbar { padding: 0.75rem 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── SIDEBAR OVERLAY ── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 99;
+    }
+
+    .sidebar-overlay.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-logo">Dália <span>Stays</span></div>
+  <div class="spinner"></div>
+</div>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span>Dália Stays</span>
+    <small>Painel do Proprietário</small>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">Visão Geral</div>
+    <button class="nav-item active" data-section="dashboard">
+      <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+
+    <div class="nav-section">Gestão</div>
+    <button class="nav-item" data-section="imoveis">
+      <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Meus Imóveis
+    </button>
+    <button class="nav-item" data-section="reservas">
+      <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservas
+    </button>
+
+    <div class="nav-section">Financeiro</div>
+    <button class="nav-item" data-section="financeiro">
+      <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Financeiro
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="proprietario-info">
+      <div class="proprietario-avatar" id="prop-avatar">CE</div>
+      <div>
+        <div class="proprietario-name" id="prop-nome">Carregando...</div>
+        <div class="proprietario-plan" id="prop-plano">profissional</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <button class="hamburger-btn" id="hamburger">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-date" id="topbar-date"></span>
+      <span class="badge-plano badge" id="badge-plano">profissional</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ SEÇÃO: DASHBOARD ═══ -->
+    <section class="section active" id="section-dashboard">
+      <div class="section-header">
+        <h2 class="section-title">Visão Geral</h2>
+        <p class="section-sub" id="dash-sub">Carregando dados...</p>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="kpi-label">Receita Bruta — Março</div>
+          <div class="kpi-value" id="kpi-receita">—</div>
+          <div class="kpi-delta" id="kpi-receita-delta"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="kpi-label">Taxa de Ocupação</div>
+          <div class="kpi-value" id="kpi-ocupacao">—</div>
+          <div class="kpi-delta" id="kpi-ocupacao-delta"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="kpi-label">Diária Média (ADR)</div>
+          <div class="kpi-value" id="kpi-adr">—</div>
+          <div class="kpi-delta" id="kpi-adr-delta"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="kpi-label">Reservas Ativas</div>
+          <div class="kpi-value" id="kpi-reservas">—</div>
+          <div class="kpi-delta" id="kpi-reservas-delta"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="kpi-label">Repasse Líquido — Março</div>
+          <div class="kpi-value" id="kpi-repasse">—</div>
+          <div class="kpi-delta" id="kpi-repasse-delta"></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Gráfico -->
+        <div class="card" style="grid-column: span 2;">
+          <div class="card-header">
+            <span class="card-title">Evolução Financeira — Últimos 6 Meses</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="chart-financeiro"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Próximos check-ins -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Próximos 7 Dias</span>
+          </div>
+          <div class="card-body" id="proximos-container">
+            <div class="empty">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Carregando...
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumo por imóvel -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Receita por Imóvel — Março</span>
+          </div>
+          <div class="card-body" id="receita-imovel-container">
+            <div class="empty">Carregando...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEÇÃO: IMÓVEIS ═══ -->
+    <section class="section" id="section-imoveis">
+      <div class="section-header">
+        <h2 class="section-title">Meus Imóveis</h2>
+        <p class="section-sub" id="imoveis-sub">Carregando...</p>
+      </div>
+      <div id="imoveis-lista"></div>
+    </section>
+
+    <!-- ═══ SEÇÃO: RESERVAS ═══ -->
+    <section class="section" id="section-reservas">
+      <div class="section-header">
+        <h2 class="section-title">Reservas</h2>
+        <p class="section-sub">Histórico dos últimos 3 meses</p>
+      </div>
+
+      <div class="filters">
+        <select class="filter-select" id="filter-imovel">
+          <option value="">Todos os imóveis</option>
+        </select>
+        <select class="filter-select" id="filter-plataforma">
+          <option value="">Todas as plataformas</option>
+          <option value="airbnb">Airbnb</option>
+          <option value="booking">Booking.com</option>
+          <option value="vrbo">Vrbo</option>
+          <option value="direto">Direto</option>
+          <option value="outro">Outro</option>
+        </select>
+        <select class="filter-select" id="filter-status">
+          <option value="">Todos os status</option>
+          <option value="confirmada">Confirmada</option>
+          <option value="checkin_feito">Check-in feito</option>
+          <option value="checkout_feito">Check-out feito</option>
+          <option value="cancelada">Cancelada</option>
+          <option value="pendente">Pendente</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hóspede</th>
+                <th>Imóvel</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Noites</th>
+                <th>Plataforma</th>
+                <th>Valor Total</th>
+                <th>Repasse</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="reservas-tbody">
+              <tr><td colspan="9" class="empty">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEÇÃO: FINANCEIRO ═══ -->
+    <section class="section" id="section-financeiro">
+      <div class="section-header">
+        <h2 class="section-title">Financeiro</h2>
+        <p class="section-sub">Repasses e demonstrativo mensal</p>
+      </div>
+
+      <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Recebido (Jan–Mar)</div>
+          <div class="kpi-value" id="fin-total-bruto">—</div>
+          <div class="kpi-delta">Receita bruta acumulada</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Comissão Dália (Jan–Mar)</div>
+          <div class="kpi-value" id="fin-total-comissao">—</div>
+          <div class="kpi-delta">15% sobre valor líquido</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Repasse Líquido (Jan–Mar)</div>
+          <div class="kpi-value" id="fin-total-repasse">—</div>
+          <div class="kpi-delta">Seu retorno real</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Extrato de Reservas</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th>Imóvel</th>
+                <th>Hóspede</th>
+                <th>Plataforma</th>
+                <th>Noites</th>
+                <th>Receita Bruta</th>
+                <th>Comissão Dália</th>
+                <th>Repasse</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="fin-tbody">
+              <tr><td colspan="9" class="empty">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</main>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://wneijebgjzmgixvdqpa.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_S6CcjLcaraiXPSI7TYLHQA_ZQLLJG1_';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Demo: Carlos Eduardo Mendes (Rio de Janeiro, Profissional)
+  const PROP_ID = '00000000-0000-0000-0000-000000000001';
+
+  const MESES_PT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  function fmt(valor) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor ?? 0);
+  }
+
+  function fmtData(dateStr) {
+    if (!dateStr) return '—';
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function badgePlataforma(p) {
+    const labels = { airbnb: 'Airbnb', booking: 'Booking', vrbo: 'Vrbo', direto: 'Direto', outro: 'Outro' };
+    return `<span class="badge badge-${p}">${labels[p] || p}</span>`;
+  }
+
+  function badgeStatus(s) {
+    const labels = {
+      confirmada: 'Confirmada',
+      checkin_feito: 'Check-in',
+      checkout_feito: 'Check-out',
+      cancelada: 'Cancelada',
+      pendente: 'Pendente'
+    };
+    return `<span class="badge badge-${s}">${labels[s] || s}</span>`;
+  }
+
+  // ──────────────────────────────────────────────
+  // LOAD DATA
+  // ──────────────────────────────────────────────
+  let allImoveis = [];
+  let allReservas = [];
+
+  async function carregarDados() {
+    // 1. Proprietário
+    const { data: prop } = await supabase
+      .from('proprietarios')
+      .select('*')
+      .eq('id', PROP_ID)
+      .single();
+
+    if (prop) {
+      const initials = prop.nome.split(' ').slice(0,2).map(n => n[0]).join('');
+      document.getElementById('prop-avatar').textContent = initials;
+      document.getElementById('prop-nome').textContent = prop.nome;
+      document.getElementById('prop-plano').textContent = prop.plano;
+      document.getElementById('badge-plano').textContent = prop.plano;
+      document.getElementById('badge-plano').className = `badge badge-${prop.plano}`;
+    }
+
+    // 2. Imóveis
+    const { data: imoveis } = await supabase
+      .from('imoveis')
+      .select('*')
+      .eq('proprietario_id', PROP_ID)
+      .eq('ativo', true);
+
+    allImoveis = imoveis || [];
+
+    // 3. Reservas (últimos 3 meses)
+    const tresMesesAtras = new Date();
+    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
+    const desde = tresMesesAtras.toISOString().split('T')[0];
+
+    const { data: reservas } = await supabase
+      .from('reservas')
+      .select('*, imoveis(nome, cidade)')
+      .eq('proprietario_id', PROP_ID)
+      .gte('checkin', desde)
+      .order('checkin', { ascending: false });
+
+    allReservas = reservas || [];
+
+    return { prop, imoveis: allImoveis, reservas: allReservas };
+  }
+
+  // ──────────────────────────────────────────────
+  // RENDER DASHBOARD
+  // ──────────────────────────────────────────────
+  function renderDashboard(imoveis, reservas) {
+    const hoje = new Date();
+    const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+
+    const reservasMes = reservas.filter(r => r.checkin.startsWith(mesAtual));
+    const reservasAtivas = reservas.filter(r => ['confirmada','checkin_feito'].includes(r.status));
+
+    const receitaBruta = reservasMes.reduce((s, r) => s + (+r.valor_total || 0), 0);
+    const repasse = reservasMes.reduce((s, r) => s + (+r.repasse_proprietario || 0), 0);
+    const noitesOcupadas = reservasMes.reduce((s, r) => s + (+r.noites || 0), 0);
+    const noitesDisponiveis = imoveis.length * new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate();
+    const ocupacao = noitesDisponiveis > 0 ? (noitesOcupadas / noitesDisponiveis * 100) : 0;
+    const adr = noitesOcupadas > 0 ? receitaBruta / noitesOcupadas : 0;
+
+    document.getElementById('dash-sub').textContent =
+      `${MESES_FULL[hoje.getMonth()]} ${hoje.getFullYear()} · ${imoveis.length} imóveis ativos`;
+
+    document.getElementById('kpi-receita').textContent = fmt(receitaBruta);
+    document.getElementById('kpi-ocupacao').textContent = `${ocupacao.toFixed(1)}%`;
+    document.getElementById('kpi-adr').textContent = fmt(adr);
+    document.getElementById('kpi-reservas').textContent = reservasAtivas.length;
+    document.getElementById('kpi-repasse').textContent = fmt(repasse);
+
+    // Próximos 7 dias
+    const daqui7 = new Date(); daqui7.setDate(daqui7.getDate() + 7);
+    const hojeStr = hoje.toISOString().split('T')[0];
+    const daqui7Str = daqui7.toISOString().split('T')[0];
+
+    const proximos = [];
+    reservas.forEach(r => {
+      if (r.checkin >= hojeStr && r.checkin <= daqui7Str) {
+        proximos.push({ data: r.checkin, tipo: 'in', hospede: r.nome_hospede, imovel: r.imoveis?.nome || '—' });
+      }
+      if (r.checkout >= hojeStr && r.checkout <= daqui7Str) {
+        proximos.push({ data: r.checkout, tipo: 'out', hospede: r.nome_hospede, imovel: r.imoveis?.nome || '—' });
+      }
+    });
+    proximos.sort((a, b) => a.data.localeCompare(b.data));
+
+    const proximosEl = document.getElementById('proximos-container');
+    if (proximos.length === 0) {
+      proximosEl.innerHTML = `<div class="empty">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Nenhum movimento nos próximos 7 dias
+      </div>`;
+    } else {
+      proximosEl.innerHTML = proximos.map(p => {
+        const d = new Date(p.data + 'T12:00:00');
+        return `<div class="checkin-item">
+          <div class="checkin-date">
+            <div class="day">${String(d.getDate()).padStart(2,'0')}</div>
+            <div class="month">${MESES_PT[d.getMonth()]}</div>
+          </div>
+          <div class="checkin-info">
+            <div class="checkin-hospede">${p.hospede}</div>
+            <div class="checkin-imovel">${p.imovel}</div>
+          </div>
+          <span class="checkin-type ${p.tipo}">${p.tipo === 'in' ? 'Check-in' : 'Check-out'}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // Receita por imóvel
+    const receitaImovel = {};
+    imoveis.forEach(im => { receitaImovel[im.id] = { nome: im.nome, valor: 0 }; });
+    reservasMes.forEach(r => {
+      if (receitaImovel[r.imovel_id]) receitaImovel[r.imovel_id].valor += (+r.valor_total || 0);
+    });
+
+    const receitaEl = document.getElementById('receita-imovel-container');
+    const entries = Object.values(receitaImovel);
+    if (entries.every(e => e.valor === 0)) {
+      receitaEl.innerHTML = `<div class="empty">Sem receita registrada em ${MESES_PT[hoje.getMonth()]}</div>`;
+    } else {
+      receitaEl.innerHTML = entries.map(e => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--gray-lighter);">
+          <div style="font-size:0.85rem;font-weight:500;">${e.nome}</div>
+          <div style="font-family:var(--serif);font-size:1rem;color:var(--green);">${fmt(e.valor)}</div>
+        </div>`).join('');
+    }
+
+    // Gráfico
+    renderGrafico(reservas);
+  }
+
+  // ──────────────────────────────────────────────
+  // RENDER GRÁFICO
+  // ──────────────────────────────────────────────
+  function renderGrafico(reservas) {
+    const hoje = new Date();
+    const meses = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+      meses.push({
+        key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,
+        label: `${MESES_PT[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`
+      });
+    }
+
+    const bruto = meses.map(m =>
+      reservas.filter(r => r.checkin.startsWith(m.key)).reduce((s,r) => s + (+r.valor_total||0), 0)
+    );
+    const liquido = meses.map(m =>
+      reservas.filter(r => r.checkin.startsWith(m.key)).reduce((s,r) => s + (+r.repasse_proprietario||0), 0)
+    );
+
+    const ctx = document.getElementById('chart-financeiro').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: meses.map(m => m.label),
+        datasets: [
+          {
+            label: 'Receita Bruta',
+            data: bruto,
+            backgroundColor: 'rgba(201,168,76,0.75)',
+            borderColor: '#C9A84C',
+            borderWidth: 1.5,
+            borderRadius: 6,
+          },
+          {
+            label: 'Repasse Líquido',
+            data: liquido,
+            backgroundColor: 'rgba(26,46,42,0.75)',
+            borderColor: '#1A2E2A',
+            borderWidth: 1.5,
+            borderRadius: 6,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              font: { family: "'DM Sans', sans-serif", size: 12 },
+              color: '#6B7280',
+              boxWidth: 14,
+              padding: 16,
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.raw)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: "'DM Sans', sans-serif", size: 11 }, color: '#6B7280' }
+          },
+          y: {
+            grid: { color: 'rgba(229,224,216,0.6)' },
+            ticks: {
+              font: { family: "'DM Sans', sans-serif", size: 11 },
+              color: '#6B7280',
+              callback: v => `R$ ${(v/1000).toFixed(0)}k`
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ──────────────────────────────────────────────
+  // RENDER IMÓVEIS
+  // ──────────────────────────────────────────────
+  function renderImoveis(imoveis, reservas) {
+    const hoje = new Date();
+    const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+
+    document.getElementById('imoveis-sub').textContent = `${imoveis.length} imóvel(is) no portfólio`;
+
+    const lista = document.getElementById('imoveis-lista');
+    if (imoveis.length === 0) {
+      lista.innerHTML = `<div class="empty">Nenhum imóvel cadastrado.</div>`;
+      return;
+    }
+
+    lista.innerHTML = imoveis.map(im => {
+      const receitaMes = reservas
+        .filter(r => r.imovel_id === im.id && r.checkin.startsWith(mesAtual))
+        .reduce((s,r) => s + (+r.valor_total||0), 0);
+
+      const plataformasBadges = (im.plataformas || []).map(p => `<span class="badge badge-${p}">${p.charAt(0).toUpperCase()+p.slice(1)}</span>`).join('');
+
+      return `<div class="imovel-card">
+        <div class="imovel-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="imovel-info">
+          <div class="imovel-nome">${im.nome}</div>
+          <div class="imovel-meta">${im.cidade}, ${im.estado} · ${im.quartos} qto${im.quartos !== 1 ? 's':''} · ${im.capacidade} hóspedes · Diária base ${fmt(im.diaria_base)}</div>
+          <div class="imovel-plataformas">${plataformasBadges}</div>
+        </div>
+        <div class="imovel-receita">
+          <div class="imovel-receita-valor">${fmt(receitaMes)}</div>
+          <div class="imovel-receita-label">receita ${MESES_PT[hoje.getMonth()]}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ──────────────────────────────────────────────
+  // RENDER RESERVAS
+  // ──────────────────────────────────────────────
+  let reservasFiltradas = [];
+
+  function renderReservas(reservas, imoveis) {
+    // Preencher filtro de imóveis
+    const filterImovel = document.getElementById('filter-imovel');
+    imoveis.forEach(im => {
+      const opt = document.createElement('option');
+      opt.value = im.id;
+      opt.textContent = im.nome;
+      filterImovel.appendChild(opt);
+    });
+
+    reservasFiltradas = reservas;
+    renderTabelaReservas(reservas);
+  }
+
+  function renderTabelaReservas(reservas) {
+    const tbody = document.getElementById('reservas-tbody');
+    if (reservas.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9" class="empty">Nenhuma reserva encontrada para os filtros selecionados.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = reservas.map(r => `
+      <tr>
+        <td><strong>${r.nome_hospede}</strong></td>
+        <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.imoveis?.nome || '—'}</td>
+        <td>${fmtData(r.checkin)}</td>
+        <td>${fmtData(r.checkout)}</td>
+        <td style="text-align:center;">${r.noites ?? '—'}</td>
+        <td>${badgePlataforma(r.plataforma)}</td>
+        <td><strong>${fmt(r.valor_total)}</strong></td>
+        <td style="color:var(--teal);">${fmt(r.repasse_proprietario)}</td>
+        <td>${badgeStatus(r.status)}</td>
+      </tr>`).join('');
+  }
+
+  function aplicarFiltros() {
+    const imovelId = document.getElementById('filter-imovel').value;
+    const plataforma = document.getElementById('filter-plataforma').value;
+    const status = document.getElementById('filter-status').value;
+
+    const filtradas = allReservas.filter(r => {
+      if (imovelId && r.imovel_id !== imovelId) return false;
+      if (plataforma && r.plataforma !== plataforma) return false;
+      if (status && r.status !== status) return false;
+      return true;
+    });
+    renderTabelaReservas(filtradas);
+  }
+
+  document.getElementById('filter-imovel').addEventListener('change', aplicarFiltros);
+  document.getElementById('filter-plataforma').addEventListener('change', aplicarFiltros);
+  document.getElementById('filter-status').addEventListener('change', aplicarFiltros);
+
+  // ──────────────────────────────────────────────
+  // RENDER FINANCEIRO
+  // ──────────────────────────────────────────────
+  function renderFinanceiro(reservas) {
+    const totalBruto = reservas.reduce((s,r) => s + (+r.valor_total||0), 0);
+    const totalComissao = reservas.reduce((s,r) => s + (+r.comissao_dalia||0), 0);
+    const totalRepasse = reservas.reduce((s,r) => s + (+r.repasse_proprietario||0), 0);
+
+    document.getElementById('fin-total-bruto').textContent = fmt(totalBruto);
+    document.getElementById('fin-total-comissao').textContent = fmt(totalComissao);
+    document.getElementById('fin-total-repasse').textContent = fmt(totalRepasse);
+
+    const sorted = [...reservas].sort((a,b) => b.checkin.localeCompare(a.checkin));
+    const tbody = document.getElementById('fin-tbody');
+    tbody.innerHTML = sorted.map(r => {
+      const d = new Date(r.checkin + 'T12:00:00');
+      const mes = `${MESES_PT[d.getMonth()]}/${d.getFullYear()}`;
+      return `<tr>
+        <td>${mes}</td>
+        <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.imoveis?.nome || '—'}</td>
+        <td>${r.nome_hospede}</td>
+        <td>${badgePlataforma(r.plataforma)}</td>
+        <td style="text-align:center;">${r.noites ?? '—'}</td>
+        <td>${fmt(r.valor_total)}</td>
+        <td style="color:var(--red);">${fmt(r.comissao_dalia)}</td>
+        <td style="color:var(--teal);font-weight:600;">${fmt(r.repasse_proprietario)}</td>
+        <td>${badgeStatus(r.status)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ──────────────────────────────────────────────
+  // NAVEGAÇÃO
+  // ──────────────────────────────────────────────
+  const titulos = {
+    dashboard: 'Dashboard',
+    imoveis: 'Meus Imóveis',
+    reservas: 'Reservas',
+    financeiro: 'Financeiro'
+  };
+
+  document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sec = btn.dataset.section;
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(`section-${sec}`).classList.add('active');
+      document.getElementById('topbar-title').textContent = titulos[sec] || sec;
+      // Fechar sidebar no mobile
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('visible');
+    });
+  });
+
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebar-overlay').classList.toggle('visible');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('visible');
+  });
+
+  // Data no topbar
+  const hoje = new Date();
+  document.getElementById('topbar-date').textContent =
+    hoje.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // ──────────────────────────────────────────────
+  // INICIALIZAR
+  // ──────────────────────────────────────────────
+  (async () => {
+    try {
+      const { imoveis, reservas } = await carregarDados();
+      renderDashboard(imoveis, reservas);
+      renderImoveis(imoveis, reservas);
+      renderReservas(reservas, imoveis);
+      renderFinanceiro(reservas);
+    } catch (err) {
+      console.error('Erro ao carregar dados:', err);
+    } finally {
+      const loading = document.getElementById('loading');
+      loading.classList.add('hidden');
+      setTimeout(() => loading.remove(), 500);
+    }
+  })();
+</script>
+</body>
+</html>

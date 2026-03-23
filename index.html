@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dália Stays — Curadoria de Imóveis por Temporada</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Dália Stays é uma curadoria especializada em aluguel por temporada para proprietários que exigem mais. Gestão ativa de imóveis no Rio de Janeiro, São Paulo, Florianópolis e todo o Brasil." />
+  <meta name="keywords" content="gestão de imóveis por temporada, aluguel por temporada, revenue management imóveis, curadoria imóveis, administração airbnb, STR Brasil, renda com imóvel Rio de Janeiro, São Paulo, Florianópolis" />
+  <meta name="author" content="Dália Stays" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dalia-stays.netlify.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Dália Stays" />
+  <meta property="og:title" content="Dália Stays — Seu imóvel como ativo financeiro de alto desempenho" />
+  <meta property="og:description" content="Curadoria especializada em aluguel por temporada para proprietários que exigem mais. Gestão ativa, revenue management e transparência total." />
+  <meta property="og:url" content="https://dalia-stays.netlify.app/" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Dália Stays — Curadoria de Imóveis por Temporada" />
+  <meta name="twitter:description" content="Seu imóvel como ativo financeiro de alto desempenho." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:  #FAFAF8;
+      --black:  #0A0A0A;
+      --gold:   #B8973A;
+      --gold-lt: #C9A84C;
+      --gray:   #6B6B6B;
+      --gray-lt: #D4D4D0;
+      --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--black);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    img { display: block; width: 100%; }
+    a   { text-decoration: none; color: inherit; }
+
+    /* ─── TYPOGRAPHY ───────────────────────────────────────── */
+    .serif { font-family: 'Cormorant Garamond', serif; }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      line-height: 1.15;
+    }
+
+    /* ─── ANIMATIONS ───────────────────────────────────────── */
+    [data-animate] {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+    }
+
+    [data-animate].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    [data-delay="1"] { transition-delay: 0.1s; }
+    [data-delay="2"] { transition-delay: 0.2s; }
+    [data-delay="3"] { transition-delay: 0.3s; }
+    [data-delay="4"] { transition-delay: 0.45s; }
+    [data-delay="5"] { transition-delay: 0.6s; }
+
+    /* ─── BUTTONS ──────────────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.78rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 0.95rem 2.4rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.35s var(--ease);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--white);
+      border-color: var(--gold);
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-lt);
+      border-color: var(--gold-lt);
+    }
+
+    .btn-outline-white {
+      background: transparent;
+      color: var(--white);
+      border-color: rgba(255,255,255,0.55);
+    }
+
+    .btn-outline-white:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--white);
+    }
+
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--black);
+      border-color: var(--black);
+    }
+
+    .btn-outline-dark:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    /* ─── SECTION COMMON ───────────────────────────────────── */
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .section-title strong {
+      font-weight: 600;
+    }
+
+    .divider-gold {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.8rem 0;
+    }
+
+    /* ─── HEADER ───────────────────────────────────────────── */
+    #header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.6rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s var(--ease), backdrop-filter 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+
+    #header.scrolled {
+      background: rgba(250, 250, 248, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom-color: var(--gold);
+    }
+
+    .header-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--white);
+      transition: color 0.4s;
+    }
+
+    #header.scrolled .header-logo { color: var(--black); }
+
+    nav { display: flex; align-items: center; gap: 2.5rem; }
+
+    nav a {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      transition: color 0.3s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    #header.scrolled nav a { color: var(--gray); }
+    #header.scrolled nav a:hover { color: var(--gold); }
+
+    .nav-cta {
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 0.5rem 1.2rem;
+      color: var(--white) !important;
+      transition: all 0.3s var(--ease) !important;
+    }
+
+    #header.scrolled .nav-cta {
+      border-color: var(--gold);
+      color: var(--gold) !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold) !important;
+      border-color: var(--gold) !important;
+      color: var(--white) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--white);
+      transition: background 0.3s;
+    }
+
+    #header.scrolled .hamburger span { background: var(--black); }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background: var(--white);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .mobile-nav.open { display: flex; }
+
+    .mobile-nav a {
+      font-size: 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      color: var(--black);
+      letter-spacing: 2px;
+    }
+
+    .mobile-nav a:hover { color: var(--gold); }
+
+    .mobile-close {
+      position: absolute;
+      top: 2rem; right: 2rem;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      transition: transform 8s var(--ease);
+    }
+
+    #hero.loaded .hero-bg { transform: scale(1); }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      padding: 0 2rem;
+    }
+
+    .hero-label {
+      font-size: 0.68rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.8;
+      max-width: 560px;
+      margin: 0 auto 2.8rem;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .scroll-indicator span {
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gold);
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollDown {
+      0%   { top: -100%; }
+      100% { top: 100%; }
+    }
+
+    /* ─── NUMBERS ──────────────────────────────────────────── */
+    #numbers {
+      background: var(--black);
+      padding: 6rem 4rem;
+    }
+
+    .numbers-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .number-item {
+      text-align: center;
+      padding: 2rem;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .number-item:last-child { border-right: none; }
+
+    .number-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+
+    .number-value em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .number-label {
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .number-source {
+      font-size: 0.6rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+
+    /* ─── ABOUT ────────────────────────────────────────────── */
+    #about {
+      padding: 8rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: center;
+    }
+
+    .about-text .section-title { margin-bottom: 2rem; }
+
+    .about-text p {
+      font-size: 0.95rem;
+      color: var(--gray);
+      line-height: 1.9;
+      margin-bottom: 1.4rem;
+    }
+
+    .about-text p strong {
+      color: var(--black);
+      font-weight: 400;
+    }
+
+    .about-img {
+      position: relative;
+    }
+
+    .about-img img {
+      height: 580px;
+      object-fit: cover;
+      filter: brightness(0.95) contrast(1.02);
+    }
+
+    .about-img::before {
+      content: '';
+      position: absolute;
+      top: -1.5rem;
+      right: -1.5rem;
+      width: 60%;
+      height: 60%;
+      border: 1px solid var(--gold);
+      z-index: -1;
+      opacity: 0.35;
+    }
+
+    /* ─── SERVICES ─────────────────────────────────────────── */
+    #services {
+      background: var(--white);
+      padding: 8rem 4rem;
+    }
+
+    .services-header {
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+    }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .service-card {
+      padding: 3rem 2.5rem;
+      background: var(--white);
+      border-top: 1px solid var(--gold);
+      position: relative;
+      transition: background 0.35s;
+    }
+
+    .service-card:hover { background: #F5F4F0; }
+
+    .service-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: rgba(184,151,58,0.15);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .service-title {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 1.5rem;
+    }
+
+    .service-text {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.85;
+    }
+
+    .service-text li {
+      list-style: none;
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-text li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 0.75rem;
+    }
+
+    .services-note {
+      max-width: 1100px;
+      margin: 3rem auto 0;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--gray);
+      letter-spacing: 0.5px;
+      font-style: italic;
+    }
+
+    /* ─── MARKET ───────────────────────────────────────────── */
+    #market {
+      background: var(--black);
+      padding: 8rem 4rem;
+    }
+
+    .market-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .market-inner .section-label { color: var(--gold); }
+    .market-inner .section-title { color: var(--white); }
+    .market-inner .divider-gold { margin-bottom: 4rem; }
+
+    .market-timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      margin-bottom: 5rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .timeline-item {
+      padding: 2rem 1.5rem;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .timeline-item:last-child { border-right: none; }
+
+    .timeline-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .timeline-stats {
+      list-style: none;
+    }
+
+    .timeline-stats li {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-stats li strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    /* Comparativo */
+    .market-compare {
+      margin-bottom: 5rem;
+    }
+
+    .compare-title {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 2rem;
+    }
+
+    .compare-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 180px 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .compare-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .compare-bar-wrap {
+      height: 3px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .compare-bar {
+      height: 100%;
+      background: var(--gold);
+      transition: width 1.2s var(--ease);
+    }
+
+    .compare-bar.muted { background: rgba(255,255,255,0.2); }
+
+    .compare-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+    }
+
+    /* City cards */
+    .city-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .city-card {
+      background: var(--black);
+      padding: 2rem;
+      transition: background 0.3s;
+    }
+
+    .city-card:hover { background: #111; }
+
+    .city-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .city-stats {
+      list-style: none;
+    }
+
+    .city-stats li {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.7;
+    }
+
+    .city-stats li strong {
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    /* ─── CALCULATOR ───────────────────────────────────────── */
+    #calculator {
+      padding: 8rem 4rem;
+      background: var(--white);
+    }
+
+    .calc-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .calc-inner .section-title { margin-bottom: 0.6rem; }
+
+    .calc-sub {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 3rem;
+    }
+
+    .calc-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .calc-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .calc-field label {
+      font-size: 0.68rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .calc-field select,
+    .calc-field input {
+      padding: 0.9rem 1rem;
+      border: none;
+      border-bottom: 1px solid var(--gray-lt);
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+
+    .calc-field select:focus,
+    .calc-field input:focus {
+      border-bottom-color: var(--gold);
+    }
+
+    .calc-field select {
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23B8973A' stroke-width='1'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+
+    .calc-btn-wrap {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+
+    /* Results */
+    #calc-result {
+      display: none;
+      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--gray-lt);
+    }
+
+    #calc-result.visible { display: block; }
+
+    .result-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--gray);
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .result-main {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--gray-lt);
+      margin-bottom: 3rem;
+    }
+
+    .result-box {
+      background: var(--white);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .result-box-label {
+      font-size: 0.65rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+
+    .result-box-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .result-box-value.gold { color: var(--gold); }
+
+    .result-box-sub {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 0.6rem;
+    }
+
+    /* Bar chart */
+    .chart-title {
+      font-size: 0.68rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .bar-chart {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 6px;
+      align-items: flex-end;
+      height: 140px;
+      margin-bottom: 0.5rem;
+    }
+
+    .bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .bar-value {
+      font-size: 0.55rem;
+      font-weight: 400;
+      color: var(--gray);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+
+    .bar {
+      width: 100%;
+      background: var(--gold);
+      opacity: 0.25;
+      transition: height 0.8s var(--ease), opacity 0.3s;
+      min-height: 4px;
+    }
+
+    .bar.peak { opacity: 1; }
+    .bar.high { opacity: 0.7; }
+    .bar.mid  { opacity: 0.45; }
+
+    .bar-month {
+      font-size: 0.58rem;
+      letter-spacing: 0.5px;
+      color: var(--gray);
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .result-note {
+      margin-top: 2.5rem;
+      padding: 1.5rem 2rem;
+      background: #F5F4F0;
+      border-left: 2px solid var(--gold);
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    .result-note strong {
+      color: var(--black);
+      font-weight: 400;
+    }
+
+    .result-cta {
+      text-align: center;
+      margin-top: 2.5rem;
+    }
+
+    /* ─── FOR WHOM ──────────────────────────────────────────── */
+    #forwhom {
+      background: #F5F4F0;
+      padding: 8rem 4rem;
+    }
+
+    .forwhom-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .forwhom-inner .section-title { margin-bottom: 4rem; }
+
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+
+    .profile-card {
+      background: var(--white);
+      padding: 3.5rem 2.5rem;
+      transition: background 0.35s;
+    }
+
+    .profile-card:hover { background: var(--black); }
+    .profile-card:hover .profile-icon { border-color: var(--gold); }
+    .profile-card:hover .profile-title,
+    .profile-card:hover .profile-text { color: rgba(255,255,255,0.8); }
+    .profile-card:hover .profile-icon svg path,
+    .profile-card:hover .profile-icon svg rect,
+    .profile-card:hover .profile-icon svg circle { stroke: var(--gold); }
+
+    .profile-icon {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(184,151,58,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+      transition: border-color 0.35s;
+    }
+
+    .profile-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .profile-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--black);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+      transition: color 0.35s;
+    }
+
+    .profile-text {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.85;
+      transition: color 0.35s;
+    }
+
+    /* ─── TESTIMONIALS ─────────────────────────────────────── */
+    #testimonials {
+      background: #0F0F0D;
+      padding: 8rem 4rem;
+    }
+
+    .testimonials-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .testimonials-inner .section-label { color: var(--gold); }
+    .testimonials-inner .section-title { color: var(--white); margin-bottom: 4rem; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .testimonial-card {
+      background: #0F0F0D;
+      padding: 3rem 2.5rem;
+      transition: background 0.35s;
+    }
+
+    .testimonial-card:hover { background: #141410; }
+
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 0.8;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
+    }
+
+    .testimonial-text {
+      font-size: 0.92rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.85;
+      margin-bottom: 2rem;
+    }
+
+    .testimonial-author strong {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--white);
+      font-weight: 400;
+      margin-bottom: 0.2rem;
+    }
+
+    .testimonial-author span {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── CTA FINAL ─────────────────────────────────────────── */
+    #cta-final {
+      position: relative;
+      padding: 10rem 4rem;
+      text-align: center;
+      background: var(--black);
+      overflow: hidden;
+    }
+
+    #cta-final::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(184,151,58,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-label {
+      font-size: 0.65rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-title {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 300;
+      color: var(--white);
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.2;
+    }
+
+    .cta-sub {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── FOOTER ────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .footer-tagline {
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-top: 0.3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      font-size: 0.68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .footer-contact {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.9;
+    }
+
+    .footer-contact a { transition: color 0.3s; }
+    .footer-contact a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 0.5rem;
+    }
+
+    /* ─── WHATSAPP FLOAT ────────────────────────────────────── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+    }
+
+    .whatsapp-label {
+      background: var(--white);
+      color: var(--black);
+      font-size: 0.75rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      padding: 0.5rem 1rem;
+      border-radius: 2px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(8px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+
+    .whatsapp-float:hover .whatsapp-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .whatsapp-btn {
+      width: 52px;
+      height: 52px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      flex-shrink: 0;
+    }
+
+    .whatsapp-float:hover .whatsapp-btn {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(37,211,102,0.55);
+    }
+
+    .whatsapp-btn svg { width: 26px; height: 26px; fill: #fff; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      #header { padding: 1.4rem 2.5rem; }
+      #about { padding: 6rem 2.5rem; gap: 4rem; }
+      #services { padding: 6rem 2.5rem; }
+      #market { padding: 6rem 2.5rem; }
+      #calculator { padding: 6rem 2.5rem; }
+      #forwhom { padding: 6rem 2.5rem; }
+      #testimonials { padding: 6rem 2.5rem; }
+      #cta-final { padding: 7rem 2.5rem; }
+      #numbers { padding: 5rem 2.5rem; }
+      footer { padding: 2.5rem; }
+
+      .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+      .number-item { border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .number-item:nth-child(2) { border-right: none; }
+      .number-item:nth-child(3),
+      .number-item:nth-child(4) { border-bottom: none; }
+
+      .market-timeline { grid-template-columns: repeat(3, 1fr); }
+      .city-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img { order: -1; }
+      .about-img img { height: 380px; }
+      .about-img::before { display: none; }
+
+      .services-grid { grid-template-columns: 1fr; }
+      .profiles-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+
+      .result-main { grid-template-columns: 1fr; }
+      .calc-form { grid-template-columns: 1fr; }
+
+      .market-timeline { grid-template-columns: repeat(2, 1fr); }
+      .city-grid { grid-template-columns: 1fr; }
+
+      footer { grid-template-columns: 1fr; text-align: center; }
+      .footer-right { text-align: center; }
+      .footer-links { flex-wrap: wrap; }
+
+      .compare-row { grid-template-columns: 120px 1fr auto; gap: 0.8rem; }
+    }
+
+    @media (max-width: 600px) {
+      #header { padding: 1.2rem 1.5rem; }
+      #numbers { padding: 4rem 1.5rem; }
+      .numbers-grid { grid-template-columns: 1fr 1fr; }
+      #about, #services, #market, #calculator, #forwhom, #testimonials, #cta-final {
+        padding: 5rem 1.5rem;
+      }
+      footer { padding: 2rem 1.5rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .bar-month { font-size: 0.5rem; }
+      .market-timeline { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══════════════════════════════════════════════ -->
+  <header id="header">
+    <a href="#" class="header-logo">Dália Stays</a>
+    <nav>
+      <a href="#about">Sobre</a>
+      <a href="#services">Serviços</a>
+      <a href="#market">Mercado</a>
+      <a href="#calculator">Calculadora</a>
+      <a href="#contato" class="nav-cta">Contato</a>
+      <a href="/painel-proprietario.html" style="padding:0.45rem 1rem;background:#C9A84C;color:#1A2E2A;border-radius:6px;font-weight:500;font-size:0.8rem;letter-spacing:0.03em;transition:background 0.2s;" onmouseover="this.style.background='#A8893A'" onmouseout="this.style.background='#C9A84C'">Área do Proprietário</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-close" id="mobile-close">×</button>
+    <a href="#about" class="mobile-link">Sobre</a>
+    <a href="#services" class="mobile-link">Serviços</a>
+    <a href="#market" class="mobile-link">Mercado</a>
+    <a href="#calculator" class="mobile-link">Calculadora</a>
+    <a href="#contato" class="mobile-link">Contato</a>
+    <a href="/painel-proprietario.html" class="mobile-link" style="color:#C9A84C;font-weight:500;">Área do Proprietário</a>
+  </div>
+
+  <!-- ═══ HERO ══════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-label" data-animate>Curadoria de Imóveis por Temporada</p>
+      <h1 class="hero-title" data-animate data-delay="1">
+        Seu imóvel como ativo financeiro<br>de alto desempenho
+      </h1>
+      <p class="hero-sub" data-animate data-delay="2">
+        Curadoria especializada em aluguel por temporada para proprietários que exigem mais
+      </p>
+      <div class="hero-buttons" data-animate data-delay="3">
+        <a href="https://wa.me/5511973720190?text=Olá%2C%20gostaria%20de%20analisar%20meu%20imóvel" target="_blank" rel="noopener" class="btn btn-gold">Analisar meu imóvel</a>
+        <a href="#about" class="btn btn-outline-white">Conheça o método</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══ NUMBERS ═══════════════════════════════════════════════ -->
+  <section id="numbers">
+    <div class="numbers-grid">
+      <div class="number-item" data-animate>
+        <div class="number-value"><em>R$</em> <span class="counter" data-target="12.4" data-decimal="1">0</span><em>bi</em></div>
+        <p class="number-label">Mercado STR Brasil<br>em 2024</p>
+        <p class="number-source">Fonte: FOHB / AirDNA 2024</p>
+      </div>
+      <div class="number-item" data-animate data-delay="1">
+        <div class="number-value"><span class="counter" data-target="47.5" data-decimal="1">0</span><em>%</em></div>
+        <p class="number-label">Crescimento do turismo<br>doméstico em 2025</p>
+        <p class="number-source">Fonte: MTur / IBGE 2025</p>
+      </div>
+      <div class="number-item" data-animate data-delay="2">
+        <div class="number-value"><span class="counter" data-target="3" data-decimal="0">0</span><em>×</em></div>
+        <p class="number-label">Receita vs aluguel<br>tradicional (média)</p>
+        <p class="number-source">Fonte: AirDNA Brasil 2024</p>
+      </div>
+      <div class="number-item" data-animate data-delay="3">
+        <div class="number-value"><span class="counter" data-target="9.4" data-decimal="1">0</span><em>%</em></div>
+        <p class="number-label">Crescimento anual<br>projetado até 2030</p>
+        <p class="number-source">Fonte: Statista / JLL 2025</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ABOUT ═════════════════════════════════════════════════ -->
+  <section id="about">
+    <div class="about-text" data-animate>
+      <p class="section-label">Posicionamento</p>
+      <h2 class="section-title">Não somos uma<br><strong>administradora.</strong><br>Somos curadores.</h2>
+      <div class="divider-gold"></div>
+      <p>
+        A Dália Stays nasceu da insatisfação com um mercado que trata imóveis como commodities.
+        Adotamos a <strong>mentalidade de asset management</strong>: cada propriedade é um ativo
+        que precisa ser posicionado, precificado e gerido com rigor financeiro.
+      </p>
+      <p>
+        Trabalhamos com um portfólio selecionado. Não aceitamos qualquer imóvel —
+        avaliamos potencial, localização, perfil do proprietário e fit com nossa metodologia antes
+        de firmar qualquer parceria.
+      </p>
+      <p>
+        <strong>O resultado é uma performance consistentemente acima da média de mercado</strong>,
+        com relatórios transparentes e comunicação direta. Sem surpresas, sem desculpas.
+      </p>
+      <a href="#calculator" class="btn btn-outline-dark" style="margin-top:1.5rem;">Calcule o potencial</a>
+    </div>
+    <div class="about-img" data-animate data-delay="2">
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" alt="Imóvel de alto padrão gerido pela Dália Stays" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- ═══ SERVICES ══════════════════════════════════════════════ -->
+  <section id="services">
+    <div class="services-header" data-animate>
+      <p class="section-label">O que entregamos</p>
+      <h2 class="section-title">Três pilares de<br><strong>performance</strong></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-animate>
+        <div class="service-number">01</div>
+        <h3 class="service-title">Gestão Completa 360°</h3>
+        <ul class="service-text">
+          <li>Listagens no Airbnb, Booking e canais premium</li>
+          <li>Comunicação com hóspedes 24/7</li>
+          <li>Coordenação de limpeza e manutenção</li>
+          <li>Gestão de avaliações e reputação digital</li>
+          <li>Relatórios mensais de performance</li>
+        </ul>
+      </div>
+      <div class="service-card" data-animate data-delay="1">
+        <div class="service-number">02</div>
+        <h3 class="service-title">Curadoria Digital</h3>
+        <ul class="service-text">
+          <li>Para proprietários em qualquer cidade do Brasil</li>
+          <li>Estratégia de posicionamento e identidade visual</li>
+          <li>Precificação dinâmica baseada em dados</li>
+          <li>Anúncios otimizados com copywriting premium</li>
+          <li>Relatórios quinzenais com insights de mercado</li>
+        </ul>
+      </div>
+      <div class="service-card" data-animate data-delay="2">
+        <div class="service-number">03</div>
+        <h3 class="service-title">Revenue Management</h3>
+        <ul class="service-text">
+          <li>Precificação dinâmica por demanda e sazonalidade</li>
+          <li>Análise de eventos locais e datas estratégicas</li>
+          <li>SEO de anúncios nos algoritmos das plataformas</li>
+          <li>Otimização de taxa de conversão</li>
+          <li>Benchmarking contínuo vs. mercado local</li>
+        </ul>
+      </div>
+    </div>
+    <p class="services-note" data-animate>Conheça nossas condições comerciais em uma conversa.</p>
+  </section>
+
+  <!-- ═══ MARKET ═════════════════════════════════════════════════ -->
+  <section id="market">
+    <div class="market-inner">
+      <div data-animate>
+        <p class="section-label">Análise STR Brasil</p>
+        <h2 class="section-title" style="color:var(--white)">O mercado<br><strong>fala por si</strong></h2>
+        <div class="divider-gold"></div>
+      </div>
+
+      <div class="market-timeline" data-animate>
+        <div class="timeline-item">
+          <div class="timeline-year">2022</div>
+          <ul class="timeline-stats">
+            <li>Mercado: <strong>R$ 8,2bi</strong></li>
+            <li>Ocupação média: <strong>58%</strong></li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2023</div>
+          <ul class="timeline-stats">
+            <li>Mercado: <strong>R$ 10,1bi</strong></li>
+            <li>Ocupação média: <strong>61%</strong></li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2024</div>
+          <ul class="timeline-stats">
+            <li>Mercado: <strong>R$ 12,4bi</strong></li>
+            <li>Ocupação média: <strong>63%</strong></li>
+            <li>Rio: <strong>R$73k/ano</strong> por imóvel</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2025</div>
+          <ul class="timeline-stats">
+            <li>Crescimento: <strong>+47,5%</strong> turismo</li>
+            <li>Imóveis ativos: <strong>619 mil</strong></li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2026<span style="font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:1px"> proj.</span></div>
+          <ul class="timeline-stats">
+            <li>Mercado est.: <strong>R$ 13,5bi</strong></li>
+            <li>Crescimento: <strong>9,4% a.a.</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="market-compare" data-animate>
+        <p class="compare-title">Comparativo de rentabilidade anual</p>
+        <div class="compare-bars">
+          <div class="compare-row">
+            <span class="compare-label">STR (Floripa / BC)</span>
+            <div class="compare-bar-wrap"><div class="compare-bar" style="width:100%"></div></div>
+            <span class="compare-value">14–17%</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Aluguel tradicional</span>
+            <div class="compare-bar-wrap"><div class="compare-bar muted" style="width:47%"></div></div>
+            <span class="compare-value">~8%</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Renda fixa (CDI)</span>
+            <div class="compare-bar-wrap"><div class="compare-bar muted" style="width:49%"></div></div>
+            <span class="compare-value">8,3%</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Ibovespa (média)</span>
+            <div class="compare-bar-wrap"><div class="compare-bar muted" style="width:32%"></div></div>
+            <span class="compare-value">5,4%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="city-grid" data-animate>
+        <div class="city-card">
+          <div class="city-name">Rio de Janeiro</div>
+          <ul class="city-stats">
+            <li>ADR médio: <strong>R$ 280/noite</strong></li>
+            <li>Ocupação média: <strong>61%</strong></li>
+            <li>Receita média: <strong>R$ 73k/ano</strong></li>
+          </ul>
+        </div>
+        <div class="city-card">
+          <div class="city-name">São Paulo</div>
+          <ul class="city-stats">
+            <li>ADR médio: <strong>R$ 230/noite</strong></li>
+            <li>Ocupação média: <strong>63%</strong></li>
+            <li>Imóveis ativos: <strong>35.686</strong></li>
+          </ul>
+        </div>
+        <div class="city-card">
+          <div class="city-name">Florianópolis</div>
+          <ul class="city-stats">
+            <li>Rentabilidade: <strong>14,3% a.a.</strong></li>
+            <li>Alta temporada: <strong>+60%</strong></li>
+            <li>Multiplicador STR: <strong>3,1×</strong></li>
+          </ul>
+        </div>
+        <div class="city-card">
+          <div class="city-name">Brasília</div>
+          <ul class="city-stats">
+            <li>ADR médio: <strong>R$ 214/noite</strong></li>
+            <li>Ocupação média: <strong>63%</strong></li>
+            <li>Receita média: <strong>R$ 49k/ano</strong></li>
+          </ul>
+        </div>
+        <div class="city-card">
+          <div class="city-name">Balneário Camboriú</div>
+          <ul class="city-stats">
+            <li>Rentabilidade: <strong>até 17% a.a.</strong></li>
+            <li>Multiplicador STR: <strong>3,5×</strong></li>
+            <li>Alta temporada expressiva</li>
+          </ul>
+        </div>
+        <div class="city-card">
+          <div class="city-name">Niterói</div>
+          <ul class="city-stats">
+            <li>ADR médio: <strong>R$ 270–390/noite</strong></li>
+            <li>Ocupação média: <strong>70%</strong></li>
+            <li>Mercado em forte crescimento</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CALCULATOR ════════════════════════════════════════════ -->
+  <section id="calculator">
+    <div class="calc-inner">
+      <div data-animate>
+        <p class="section-label">Calculadora de Potencial</p>
+        <h2 class="section-title">Qual é o potencial<br><strong>do seu imóvel?</strong></h2>
+        <div class="divider-gold"></div>
+        <p class="calc-sub">Estimativa baseada em dados reais de mercado por cidade</p>
+      </div>
+
+      <div class="calc-form" data-animate>
+        <div class="calc-field">
+          <label for="calc-city">Cidade</label>
+          <select id="calc-city">
+            <option value="">Selecione a cidade</option>
+            <option value="rio">Rio de Janeiro</option>
+            <option value="sp">São Paulo</option>
+            <option value="floripa">Florianópolis</option>
+            <option value="bsb">Brasília</option>
+            <option value="bc">Balneário Camboriú</option>
+            <option value="niteroi">Niterói</option>
+            <option value="salvador">Salvador</option>
+            <option value="fortaleza">Fortaleza</option>
+            <option value="recife">Recife</option>
+            <option value="poa">Porto Alegre</option>
+            <option value="curitiba">Curitiba</option>
+            <option value="bh">Belo Horizonte</option>
+            <option value="outras">Outras cidades</option>
+          </select>
+        </div>
+        <div class="calc-field">
+          <label for="calc-rooms">Número de quartos</label>
+          <select id="calc-rooms">
+            <option value="">Selecione</option>
+            <option value="1">1 quarto</option>
+            <option value="2">2 quartos</option>
+            <option value="3">3 quartos</option>
+            <option value="4">4 quartos ou mais</option>
+          </select>
+        </div>
+        <div class="calc-field">
+          <label for="calc-rent">Aluguel tradicional atual (R$/mês)</label>
+          <input type="number" id="calc-rent" placeholder="Ex: 4500" min="0" />
+        </div>
+        <div class="calc-field">
+          <label for="calc-type">Tipo de gestão</label>
+          <select id="calc-type">
+            <option value="">Selecione</option>
+            <option value="completa">Gestão Completa</option>
+            <option value="digital">Curadoria Digital</option>
+          </select>
+        </div>
+        <div class="calc-btn-wrap">
+          <button class="btn btn-gold" id="calc-btn">Calcular Potencial</button>
+        </div>
+      </div>
+
+      <div id="calc-result">
+        <p class="result-headline" id="result-headline"></p>
+        <div class="result-main">
+          <div class="result-box">
+            <p class="result-box-label">Receita estimada STR / mês</p>
+            <p class="result-box-value gold" id="result-str-month">—</p>
+            <p class="result-box-sub">média anual</p>
+          </div>
+          <div class="result-box">
+            <p class="result-box-label">Aluguel tradicional / mês</p>
+            <p class="result-box-value" id="result-trad-month">—</p>
+            <p class="result-box-sub">referência atual</p>
+          </div>
+          <div class="result-box">
+            <p class="result-box-label">Diferença potencial</p>
+            <p class="result-box-value gold" id="result-diff">—</p>
+            <p class="result-box-sub" id="result-diff-pct">acima do aluguel tradicional</p>
+          </div>
+        </div>
+
+        <p class="chart-title">Estimativa de receita mensal — sazonalidade</p>
+        <div class="bar-chart" id="bar-chart"></div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-bottom:2.5rem;">
+          <div style="text-align:center" class="bar-month">Jan</div>
+          <div style="text-align:center" class="bar-month">Fev</div>
+          <div style="text-align:center" class="bar-month">Mar</div>
+          <div style="text-align:center" class="bar-month">Abr</div>
+          <div style="text-align:center" class="bar-month">Mai</div>
+          <div style="text-align:center" class="bar-month">Jun</div>
+          <div style="text-align:center" class="bar-month">Jul</div>
+          <div style="text-align:center" class="bar-month">Ago</div>
+          <div style="text-align:center" class="bar-month">Set</div>
+          <div style="text-align:center" class="bar-month">Out</div>
+          <div style="text-align:center" class="bar-month">Nov</div>
+          <div style="text-align:center" class="bar-month">Dez</div>
+        </div>
+
+        <div class="result-note" id="result-note"></div>
+
+        <div class="result-cta">
+          <a href="#" id="result-wa-btn" target="_blank" rel="noopener" class="btn btn-gold">
+            Quero uma análise real do meu imóvel
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOR WHOM ══════════════════════════════════════════════ -->
+  <section id="forwhom">
+    <div class="forwhom-inner">
+      <div data-animate>
+        <p class="section-label">Para quem é</p>
+        <h2 class="section-title">Selecionamos<br><strong>quem trabalhamos</strong></h2>
+        <div class="divider-gold"></div>
+      </div>
+      <div class="profiles-grid">
+        <div class="profile-card" data-animate>
+          <div class="profile-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#B8973A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 22V12h6v10" stroke="#B8973A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="profile-title">O Proprietário Estratégico</h3>
+          <p class="profile-text">Possui um ou mais imóveis e sabe que o aluguel tradicional não captura o valor real do ativo. Quer renda superior, gestão profissional e relatórios claros — sem o trabalho operacional.</p>
+        </div>
+        <div class="profile-card" data-animate data-delay="1">
+          <div class="profile-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="#B8973A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 21h8M12 17v4" stroke="#B8973A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="profile-title">O Investidor de Performance</h3>
+          <p class="profile-text">Adquiriu imóvel como ativo financeiro e exige retorno acima da renda fixa. Pensa em TIR, cap rate e crescimento de portfólio. Precisa de um parceiro que fale a mesma língua.</p>
+        </div>
+        <div class="profile-card" data-animate data-delay="2">
+          <div class="profile-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="8" r="4" stroke="#B8973A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#B8973A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="profile-title">O Perfil Premium</h3>
+          <p class="profile-text">Não abre mão de profissionalismo, discrição e comunicação impecável. Valoriza a reputação do imóvel tanto quanto a receita. Para quem transparência não é diferencial — é requisito.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONIALS ══════════════════════════════════════════ -->
+  <section id="testimonials">
+    <div class="testimonials-inner">
+      <div data-animate>
+        <p class="section-label">Depoimentos</p>
+        <h2 class="section-title">O que dizem<br><strong>nossos parceiros</strong></h2>
+      </div>
+      <div class="testimonials-grid" data-animate>
+        <div class="testimonial-card">
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">Em seis meses com a Dália Stays, meu imóvel rendeu 2,9 vezes o que rendia no aluguel tradicional. Mais do que os números, o que me surpreendeu foi a transparência e o nível dos relatórios. Sinto que tenho um sócio de verdade cuidando do meu patrimônio.</p>
+          <div class="testimonial-author">
+            <strong>Renata Figueiredo</strong>
+            <span>Rio de Janeiro — Proprietária, Leblon</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">Tenho três imóveis no litoral e nunca conseguia otimizar todos ao mesmo tempo. A Dália Stays não só assumiu a gestão completa como aumentou a ocupação média em 22 pontos percentuais no primeiro trimestre. Resultado com dados reais, sem achismos.</p>
+          <div class="testimonial-author">
+            <strong>Eduardo Magalhães</strong>
+            <span>Florianópolis — Investidor, portfólio de 3 imóveis</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">Moro fora do Brasil e estava com receio de colocar meu apartamento em São Paulo para alugar por temporada. A Dália Stays cuida de tudo com um nível de profissionalismo que raramente encontrei no mercado imobiliário brasileiro.</p>
+          <div class="testimonial-author">
+            <strong>Mariana Castilho</strong>
+            <span>São Paulo — Proprietária, Itaim Bibi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA FINAL ══════════════════════════════════════════════ -->
+  <section id="cta-final" id="contato">
+    <div data-animate>
+      <p class="cta-label">Análise gratuita</p>
+      <h2 class="cta-title">Qual é o potencial real<br>do seu imóvel?</h2>
+      <p class="cta-sub">Realizamos uma análise personalizada e gratuita. Sem compromisso.</p>
+      <a href="https://wa.me/5511973720190?text=Olá%2C%20gostaria%20de%20solicitar%20uma%20análise%20gratuita%20do%20meu%20imóvel" target="_blank" rel="noopener" class="btn btn-gold">
+        Solicitar análise gratuita
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═════════════════════════════════════════════════ -->
+  <footer id="contato">
+    <div>
+      <div class="footer-logo">Dália Stays</div>
+      <div class="footer-tagline">Curadoria de Imóveis por Temporada</div>
+    </div>
+    <nav class="footer-links">
+      <a href="#about">Sobre</a>
+      <a href="#services">Serviços</a>
+      <a href="#market">Mercado</a>
+      <a href="#calculator">Calculadora</a>
+    </nav>
+    <div class="footer-right">
+      <div class="footer-contact">
+        <a href="https://wa.me/5511973720190" target="_blank" rel="noopener">+55 11 97372-0190</a><br>
+        <a href="mailto:hello@daliastays.com">hello@daliastays.com</a><br>
+        <a href="https://instagram.com/daliastays" target="_blank" rel="noopener">@daliastays</a>
+      </div>
+      <div class="footer-copy">© 2026 Dália Stays. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <!-- ═══ WHATSAPP FLOAT ═════════════════════════════════════════ -->
+  <a class="whatsapp-float" href="https://wa.me/5511973720190" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <span class="whatsapp-label">Fale conosco</span>
+    <div class="whatsapp-btn">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 0C7.164 0 0 7.163 0 16c0 2.825.738 5.476 2.027 7.788L0 32l8.437-2.01A15.93 15.93 0 0016 32c8.836 0 16-7.163 16-16S24.836 0 16 0zm0 29.2a13.14 13.14 0 01-6.695-1.833l-.48-.285-4.97 1.184 1.23-4.847-.314-.497A13.12 13.12 0 012.8 16C2.8 8.71 8.71 2.8 16 2.8S29.2 8.71 29.2 16 23.29 29.2 16 29.2zm7.19-9.874c-.394-.197-2.33-1.148-2.692-1.279-.362-.13-.625-.197-.888.197-.263.394-1.02 1.279-1.25 1.542-.23.263-.46.296-.854.099-.394-.197-1.663-.613-3.167-1.953-1.17-1.044-1.96-2.333-2.19-2.727-.23-.394-.024-.607.173-.803.177-.176.394-.46.591-.69.197-.23.263-.394.394-.657.131-.263.066-.493-.033-.69-.099-.197-.888-2.14-1.217-2.929-.32-.77-.645-.665-.888-.677l-.757-.013c-.263 0-.69.099-1.052.493-.362.394-1.382 1.35-1.382 3.293 0 1.942 1.415 3.82 1.612 4.083.197.263 2.783 4.25 6.744 5.959.943.407 1.678.65 2.25.832.946.3 1.806.258 2.487.156.759-.113 2.33-.952 2.659-1.872.329-.92.329-1.708.23-1.872-.098-.164-.362-.263-.756-.46z"/>
+      </svg>
+    </div>
+  </a>
+
+  <!-- ═══ SCRIPTS ════════════════════════════════════════════════ -->
+  <script>
+    // ── Hero image load ──────────────────────────────────────────
+    window.addEventListener('load', () => {
+      document.getElementById('hero').classList.add('loaded');
+    });
+
+    // ── Header scroll ────────────────────────────────────────────
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Mobile nav ───────────────────────────────────────────────
+    const mobileNav = document.getElementById('mobile-nav');
+    document.getElementById('hamburger').addEventListener('click', () => mobileNav.classList.add('open'));
+    document.getElementById('mobile-close').addEventListener('click', () => mobileNav.classList.remove('open'));
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileNav.classList.remove('open'));
+    });
+
+    // ── Intersection Observer: fade-in ───────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+
+    // ── Animated counters ────────────────────────────────────────
+    function animateCounter(el) {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimal) || 0;
+      const duration = 1800;
+      const start = performance.now();
+
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = eased * target;
+        el.textContent = decimals > 0 ? value.toFixed(decimals) : Math.floor(value);
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    // ── Calculator ───────────────────────────────────────────────
+    const multipliers = {
+      rio: 2.8, sp: 2.4, floripa: 3.1, bsb: 2.2, bc: 3.5,
+      niteroi: 2.6, salvador: 2.3, fortaleza: 2.1, recife: 2.0,
+      poa: 1.9, curitiba: 1.8, bh: 2.5, outras: 2.0
+    };
+
+    const roomMult = { '1': 1.0, '2': 1.3, '3': 1.6, '4': 2.0 };
+
+    const seasonality = [1.6, 1.5, 1.2, 0.9, 0.85, 0.9, 1.1, 0.85, 0.9, 1.0, 1.1, 1.5];
+    const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+    const cityNames = {
+      rio: 'Rio de Janeiro', sp: 'São Paulo', floripa: 'Florianópolis',
+      bsb: 'Brasília', bc: 'Balneário Camboriú', niteroi: 'Niterói',
+      salvador: 'Salvador', fortaleza: 'Fortaleza', recife: 'Recife',
+      poa: 'Porto Alegre', curitiba: 'Curitiba', bh: 'Belo Horizonte',
+      outras: 'sua cidade'
+    };
+
+    function fmt(v) {
+      return 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+    }
+
+    document.getElementById('calc-btn').addEventListener('click', () => {
+      const city  = document.getElementById('calc-city').value;
+      const rooms = document.getElementById('calc-rooms').value;
+      const rent  = parseFloat(document.getElementById('calc-rent').value);
+      const type  = document.getElementById('calc-type').value;
+
+      if (!city || !rooms || !rent || isNaN(rent) || rent <= 0 || !type) {
+        alert('Por favor, preencha todos os campos para calcular o potencial.');
+        return;
+      }
+
+      const baseMultiplier = multipliers[city] * roomMult[rooms] * (type === 'completa' ? 1.0 : 0.92);
+      const avgMonthlySTR  = rent * baseMultiplier;
+      const diff           = avgMonthlySTR - rent;
+      const diffPct        = ((diff / rent) * 100).toFixed(0);
+
+      // Monthly values with seasonality
+      const avgSeason = seasonality.reduce((a,b) => a+b, 0) / 12;
+      const monthlyValues = seasonality.map(s => avgMonthlySTR * (s / avgSeason));
+
+      // Update results
+      document.getElementById('result-str-month').textContent = fmt(avgMonthlySTR);
+      document.getElementById('result-trad-month').textContent = fmt(rent);
+      document.getElementById('result-diff').textContent = '+' + fmt(diff);
+      document.getElementById('result-diff-pct').textContent = '+' + diffPct + '% acima do aluguel tradicional';
+      document.getElementById('result-headline').textContent =
+        'Estimativa para imóvel de ' + rooms + (rooms === '4' ? ' quartos ou mais' : ' quarto' + (rooms > 1 ? 's' : '')) +
+        ' em ' + cityNames[city] + ' com gestão profissional:';
+
+      // Bar chart
+      const maxVal = Math.max(...monthlyValues);
+      const chart = document.getElementById('bar-chart');
+      chart.innerHTML = '';
+      monthlyValues.forEach((val, i) => {
+        const pct = (val / maxVal) * 100;
+        const season = seasonality[i];
+        const cls = season >= 1.4 ? 'peak' : season >= 1.0 ? 'high' : 'mid';
+        const col = document.createElement('div');
+        col.className = 'bar-col';
+        const valK = val >= 1000 ? 'R$' + (val/1000).toFixed(1) + 'k' : 'R$' + Math.round(val);
+        col.innerHTML = '<span class="bar-value">' + valK + '</span><div class="bar ' + cls + '" style="height:' + pct + '%"></div>';
+        chart.appendChild(col);
+      });
+
+      // Note
+      document.getElementById('result-note').innerHTML =
+        '<strong>Com gestão profissional Dália Stays, seu imóvel pode render ' + diffPct +
+        '% acima da média do aluguel tradicional</strong> em ' + cityNames[city] +
+        '. Valores estimados com base em dados reais de mercado (AirDNA / FOHB 2024). ' +
+        'Resultados reais variam conforme localização exata, padrão do imóvel e condições de mercado.';
+
+      // WhatsApp CTA
+      const msg = encodeURIComponent(
+        'Olá! Calculei o potencial do meu imóvel na Dália Stays: ' +
+        rooms + ' quarto(s) em ' + cityNames[city] +
+        ', aluguel atual de ' + fmt(rent) + '/mês. ' +
+        'Potencial estimado: ' + fmt(avgMonthlySTR) + '/mês no STR. Quero saber mais!'
+      );
+      document.getElementById('result-wa-btn').href = 'https://wa.me/5511973720190?text=' + msg;
+
+      // Show
+      const resultEl = document.getElementById('calc-result');
+      resultEl.classList.add('visible');
+      setTimeout(() => resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    });
+  </script>
+</body>
+</html>
