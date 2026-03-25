@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Dália Stays</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg:       #F4F5F7;
+      --sidebar:  #1A2E2A;
+      --sidebar-hover: #2A4A44;
+      --gold:     #C9A84C;
+      --gold-dk:  #B8973A;
+      --white:    #FFFFFF;
+      --black:    #111827;
+      --gray:     #6B7280;
+      --gray-lt:  #E5E7EB;
+      --green:    #059669;
+      --red:      #DC2626;
+      --blue:     #2563EB;
+      --orange:   #D97706;
+      --radius:   10px;
+      --shadow:   0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Auth Screen ─────────────────────────────────────────────── */
+    #auth-screen {
+      position: fixed; inset: 0;
+      background: var(--sidebar);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+
+    .auth-box {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    }
+
+    .auth-logo {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--sidebar);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+    }
+
+    .auth-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 2rem; }
+
+    .auth-spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--gray-lt);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 1.5rem auto 0;
+    }
+
+    .auth-error {
+      font-size: 0.82rem; color: var(--red);
+      background: #fef2f2; border-radius: 8px;
+      padding: 0.75rem 1rem; margin-top: 1.5rem;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────── */
+    #sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--sidebar);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+
+    .sidebar-logo {
+      padding: 1.5rem 1.25rem 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .sidebar-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      padding: 1.25rem 1.25rem 0.5rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      cursor: pointer;
+      border-radius: 6px;
+      margin: 0 0.5rem;
+      transition: background 0.15s, color 0.15s;
+      border: none; background: none; width: calc(100% - 1rem); text-align: left;
+    }
+
+    .nav-item:hover { background: var(--sidebar-hover); color: white; }
+    .nav-item.active { background: var(--gold); color: var(--sidebar); font-weight: 500; }
+
+    .nav-icon { font-size: 1rem; width: 1.2rem; flex-shrink: 0; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .admin-badge {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-logout {
+      width: 100%; padding: 0.55rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: background 0.15s;
+    }
+
+    .btn-logout:hover { background: rgba(255,255,255,0.12); color: white; }
+
+    /* ── Main ────────────────────────────────────────────────────── */
+    #main {
+      margin-left: 240px;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: white;
+      border-bottom: 1px solid var(--gray-lt);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 40;
+    }
+
+    .topbar-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .topbar-user {
+      font-size: 0.8rem;
+      color: var(--gray);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .user-dot {
+      width: 28px; height: 28px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 600; color: var(--sidebar);
+    }
+
+    .content { padding: 2rem; }
+
+    /* ── Sections ────────────────────────────────────────────────── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Cards ───────────────────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .stat-card.gold::before  { background: var(--gold); }
+    .stat-card.green::before { background: var(--green); }
+    .stat-card.blue::before  { background: var(--blue); }
+    .stat-card.orange::before{ background: var(--orange); }
+
+    .stat-label {
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 0.6rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-sub { font-size: 0.78rem; color: var(--gray); }
+
+    /* ── Table Card ──────────────────────────────────────────────── */
+    .table-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-lt);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+    }
+
+    .table-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .table-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+    .badge-live {
+      font-size: 0.68rem;
+      background: #d1fae5; color: #065f46;
+      padding: 0.2rem 0.6rem; border-radius: 20px;
+      font-weight: 500; letter-spacing: 0.04em;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    thead th {
+      background: #F9FAFB;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray);
+      border-bottom: 1px solid var(--gray-lt);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #F3F4F6;
+      color: var(--black);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #FAFAFA; }
+
+    .empty-row td {
+      text-align: center;
+      padding: 3rem;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+
+    /* ── Badges ──────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .badge-novo       { background:#dbeafe; color:#1e40af; }
+    .badge-em_contato { background:#fef3c7; color:#92400e; }
+    .badge-convertido { background:#d1fae5; color:#065f46; }
+    .badge-descartado { background:#fee2e2; color:#991b1b; }
+    .badge-ativo      { background:#d1fae5; color:#065f46; }
+    .badge-inativo    { background:#fee2e2; color:#991b1b; }
+    .badge-basico     { background:#e0e7ff; color:#3730a3; }
+    .badge-profissional{ background:#fef3c7; color:#92400e; }
+    .badge-premium    { background:#fce7f3; color:#9d174d; }
+
+    /* ── Buttons ─────────────────────────────────────────────────── */
+    .btn {
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.15s, background 0.15s;
+      border: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--sidebar); color: white; }
+    .btn-gold    { background: var(--gold); color: var(--sidebar); }
+    .btn-outline { background: white; color: var(--black); border: 1px solid var(--gray-lt); }
+    .btn-red     { background: var(--red); color: white; }
+    .btn-green   { background: var(--green); color: white; }
+    .btn-sm      { padding: 0.3rem 0.7rem; font-size: 0.74rem; }
+
+    /* ── Select in table ─────────────────────────────────────────── */
+    select.status-select {
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--gray-lt);
+      font-size: 0.78rem;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      cursor: pointer;
+    }
+
+    /* ── Dashboard extras ────────────────────────────────────────── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .recent-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #F3F4F6;
+      font-size: 0.83rem;
+    }
+
+    .recent-item:last-child { border-bottom: none; }
+    .recent-name { font-weight: 500; color: var(--black); }
+    .recent-sub  { font-size: 0.74rem; color: var(--gray); margin-top: 0.1rem; }
+
+    .activity-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
+
+    /* ── Filter bar ──────────────────────────────────────────────── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    }
+
+    .filter-bar input,
+    .filter-bar select {
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--gray-lt);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      color: var(--black);
+    }
+
+    .filter-bar input { min-width: 200px; }
+
+    /* ── Spinner ─────────────────────────────────────────────────── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid var(--gray-lt);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 2rem auto; display: block;
+    }
+
+    /* ── Toast ───────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--sidebar); color: white;
+      padding: 0.75rem 1.25rem; border-radius: 8px;
+      font-size: 0.85rem; z-index: 999;
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.3s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: var(--red); }
+    .toast.success { background: var(--green); }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-100%); }
+      #main { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Auth gate -->
+  <div id="auth-screen">
+    <div class="auth-box">
+      <div class="auth-logo">Dália Stays</div>
+      <div class="auth-sub">Portal Administrativo</div>
+      <div class="auth-spinner"></div>
+      <div class="auth-error" id="auth-error" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <nav id="sidebar" style="display:none">
+    <div class="sidebar-logo">Dália · Admin</div>
+
+    <div class="sidebar-label">Menu</div>
+
+    <button class="nav-item active" data-section="dashboard">
+      <span class="nav-icon">📊</span> Dashboard
+    </button>
+    <button class="nav-item" data-section="proprietarios">
+      <span class="nav-icon">👤</span> Proprietários
+    </button>
+    <button class="nav-item" data-section="leads">
+      <span class="nav-icon">📋</span> Leads
+    </button>
+    <button class="nav-item" data-section="imoveis">
+      <span class="nav-icon">🏡</span> Imóveis
+    </button>
+    <button class="nav-item" data-section="relatorios">
+      <span class="nav-icon">📈</span> Relatórios
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="admin-badge" id="admin-email-label"></div>
+      <button class="btn-logout" id="btn-logout">Sair</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div id="main" style="display:none">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-user">
+        <span id="topbar-email"></span>
+        <div class="user-dot" id="user-initials">D</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══ DASHBOARD ═══════════════════════════════════════════ -->
+      <section class="section active" id="section-dashboard">
+
+        <div class="stats-grid">
+          <div class="stat-card gold">
+            <div class="stat-label">Proprietários</div>
+            <div class="stat-value" id="kpi-proprietarios">—</div>
+            <div class="stat-sub">cadastrados</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Imóveis Ativos</div>
+            <div class="stat-value" id="kpi-imoveis">—</div>
+            <div class="stat-sub">na plataforma</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-label">Leads Novos</div>
+            <div class="stat-value" id="kpi-leads">—</div>
+            <div class="stat-sub">aguardando contato</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-label">Receita Total</div>
+            <div class="stat-value" id="kpi-receita">—</div>
+            <div class="stat-sub">repasse plataforma</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <!-- Leads recentes -->
+          <div class="table-card">
+            <div class="table-header">
+              <div class="table-title">Leads Recentes</div>
+              <button class="btn btn-outline btn-sm" onclick="switchSection('leads')">Ver todos →</button>
+            </div>
+            <div style="padding:0 1rem" id="dash-leads-list">
+              <div class="spinner"></div>
+            </div>
+          </div>
+
+          <!-- Atividade rápida -->
+          <div class="table-card">
+            <div class="table-header">
+              <div class="table-title">Proprietários Recentes</div>
+              <button class="btn btn-outline btn-sm" onclick="switchSection('proprietarios')">Ver todos →</button>
+            </div>
+            <div style="padding:0 1rem" id="dash-props-list">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ PROPRIETÁRIOS ════════════════════════════════════════ -->
+      <section class="section" id="section-proprietarios">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Proprietários</div>
+            <div class="filter-bar">
+              <input type="text" id="prop-search" placeholder="Buscar por nome ou e-mail…" oninput="filtrarProprietarios()" />
+              <button class="btn btn-outline btn-sm" onclick="exportarProprietariosCSV()">⬇ CSV</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Plano</th>
+                  <th>Imóveis</th>
+                  <th>Cadastro</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="props-tbody">
+                <tr class="empty-row"><td colspan="7"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ LEADS ════════════════════════════════════════════════ -->
+      <section class="section" id="section-leads">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">
+              Leads
+              <span class="badge-live" style="margin-left:0.5rem">● Realtime</span>
+            </div>
+            <div class="filter-bar">
+              <input type="text" id="lead-search" placeholder="Buscar por nome, e-mail ou cidade…" oninput="filtrarLeads()" />
+              <select id="lead-status-filter" onchange="filtrarLeads()">
+                <option value="">Todos os status</option>
+                <option value="novo">Novo</option>
+                <option value="em_contato">Em contato</option>
+                <option value="convertido">Convertido</option>
+                <option value="descartado">Descartado</option>
+              </select>
+              <button class="btn btn-outline btn-sm" onclick="exportarLeadsCSV()">⬇ CSV</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>WhatsApp</th>
+                  <th>Cidade</th>
+                  <th>Situação</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="leads-tbody">
+                <tr class="empty-row"><td colspan="7"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ IMÓVEIS ══════════════════════════════════════════════ -->
+      <section class="section" id="section-imoveis">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Imóveis</div>
+            <div class="filter-bar">
+              <input type="text" id="imovel-search" placeholder="Buscar por nome ou cidade…" oninput="filtrarImoveis()" />
+              <button class="btn btn-outline btn-sm" onclick="exportarImoveisCSV()">⬇ CSV</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Cidade</th>
+                  <th>Quartos</th>
+                  <th>Diária Base</th>
+                  <th>Proprietário</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="imoveis-tbody">
+                <tr class="empty-row"><td colspan="6"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ RELATÓRIOS ═══════════════════════════════════════════ -->
+      <section class="section" id="section-relatorios">
+        <div class="stats-grid" style="margin-bottom:1.25rem">
+          <div class="stat-card gold">
+            <div class="stat-label">Total Reservas</div>
+            <div class="stat-value" id="rel-reservas">—</div>
+            <div class="stat-sub">todas as propriedades</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Receita Bruta</div>
+            <div class="stat-value" id="rel-bruta">—</div>
+            <div class="stat-sub">valor total hóspedes</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-label">Repasse Proprietários</div>
+            <div class="stat-value" id="rel-repasse">—</div>
+            <div class="stat-sub">líquido aos donos</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-label">Comissão Plataforma</div>
+            <div class="stat-value" id="rel-comissao">—</div>
+            <div class="stat-sub">receita Dália Stays</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Reservas — Visão Geral</div>
+            <button class="btn btn-outline btn-sm" onclick="exportarReservasCSV()">⬇ Exportar CSV</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hóspede</th>
+                  <th>Imóvel</th>
+                  <th>Check-in</th>
+                  <th>Check-out</th>
+                  <th>Noites</th>
+                  <th>Valor Total</th>
+                  <th>Repasse</th>
+                  <th>Comissão</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="reservas-tbody">
+                <tr class="empty-row"><td colspan="9"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL     = 'https://iickvzkkradmmwncogru.supabase.co';
+    const SUPABASE_ANON_KEY= 'sb_publishable_wxVKHpOV4-IYjLFSQxfiBw_JJ6Cohn6';
+    const ADMIN_EMAIL      = 'daniel.sdiasd@gmail.com';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ── Helpers ──────────────────────────────────────────────────────
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('pt-BR');
+    }
+
+    function fmtMoney(v) {
+      if (v == null) return '—';
+      return 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    }
+
+    function fmtMoneyShort(v) {
+      if (v == null) return '—';
+      const n = Number(v);
+      if (n >= 1000000) return 'R$ ' + (n/1000000).toFixed(1) + 'M';
+      if (n >= 1000)    return 'R$ ' + (n/1000).toFixed(1) + 'k';
+      return 'R$ ' + n.toFixed(0);
+    }
+
+    function toast(msg, type = '') {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast show' + (type ? ' ' + type : '');
+      setTimeout(() => el.className = 'toast', 3000);
+    }
+
+    // ── Auth ──────────────────────────────────────────────────────────
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = '/login.html';
+        return null;
+      }
+
+      const email = session.user.email;
+
+      if (email !== ADMIN_EMAIL) {
+        document.getElementById('auth-error').style.display = 'block';
+        document.getElementById('auth-error').textContent =
+          `Acesso negado. Apenas ${ADMIN_EMAIL} pode acessar este painel.`;
+        setTimeout(() => { window.location.href = '/login.html'; }, 3000);
+        return null;
+      }
+
+      return session.user;
+    }
+
+    // ── Navigation ────────────────────────────────────────────────────
+    window.switchSection = function(name) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById('section-' + name).classList.add('active');
+      document.querySelector(`[data-section="${name}"]`).classList.add('active');
+
+      const titles = {
+        dashboard: 'Dashboard',
+        proprietarios: 'Proprietários',
+        leads: 'Leads',
+        imoveis: 'Imóveis',
+        relatorios: 'Relatórios',
+      };
+      document.getElementById('topbar-title').textContent = titles[name] || name;
+    };
+
+    document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
+      btn.addEventListener('click', () => switchSection(btn.dataset.section));
+    });
+
+    // ── Data stores ───────────────────────────────────────────────────
+    let allProprietarios = [];
+    let allLeads = [];
+    let allImoveis = [];
+    let allReservas = [];
+
+    // ── Dashboard ─────────────────────────────────────────────────────
+    async function loadDashboard() {
+      // KPI: proprietários
+      const { count: cProp } = await supabase.from('proprietarios').select('*', { count: 'exact', head: true });
+      document.getElementById('kpi-proprietarios').textContent = cProp ?? 0;
+
+      // KPI: imóveis ativos
+      const { count: cIm } = await supabase.from('imoveis').select('*', { count: 'exact', head: true }).eq('ativo', true);
+      document.getElementById('kpi-imoveis').textContent = cIm ?? 0;
+
+      // KPI: leads novos
+      const { count: cLead } = await supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'novo');
+      document.getElementById('kpi-leads').textContent = cLead ?? 0;
+
+      // KPI: receita (comissão = valor_total - repasse_proprietario)
+      const { data: resFinanceiro } = await supabase.from('reservas').select('valor_total, repasse_proprietario').neq('status', 'cancelada');
+      let receita = 0;
+      (resFinanceiro || []).forEach(r => {
+        const comissao = (r.valor_total || 0) - (r.repasse_proprietario || 0);
+        receita += comissao;
+      });
+      document.getElementById('kpi-receita').textContent = fmtMoneyShort(receita);
+
+      // Leads recentes
+      const { data: leadsR } = await supabase.from('leads').select('nome,email,cidade,status,created_at').order('created_at', { ascending: false }).limit(6);
+      const ll = document.getElementById('dash-leads-list');
+      ll.innerHTML = '';
+      if (!leadsR || !leadsR.length) {
+        ll.innerHTML = '<p style="padding:1.5rem 0;color:#6B7280;font-size:0.83rem;text-align:center">Nenhum lead ainda</p>';
+      } else {
+        leadsR.forEach(l => {
+          ll.innerHTML += `<div class="recent-item">
+            <div>
+              <div class="recent-name">${l.nome}</div>
+              <div class="recent-sub">${l.cidade || '—'} · ${l.email}</div>
+            </div>
+            <span class="badge badge-${l.status}">${l.status}</span>
+          </div>`;
+        });
+      }
+
+      // Proprietários recentes
+      const { data: propsR } = await supabase.from('proprietarios').select('nome,email,plano,created_at').order('created_at', { ascending: false }).limit(6);
+      const pl = document.getElementById('dash-props-list');
+      pl.innerHTML = '';
+      if (!propsR || !propsR.length) {
+        pl.innerHTML = '<p style="padding:1.5rem 0;color:#6B7280;font-size:0.83rem;text-align:center">Nenhum proprietário ainda</p>';
+      } else {
+        propsR.forEach(p => {
+          pl.innerHTML += `<div class="recent-item">
+            <div>
+              <div class="recent-name">${p.nome}</div>
+              <div class="recent-sub">${p.email}</div>
+            </div>
+            <span class="badge badge-${p.plano || 'basico'}">${p.plano || 'básico'}</span>
+          </div>`;
+        });
+      }
+    }
+
+    // ── Proprietários ─────────────────────────────────────────────────
+    async function loadProprietarios() {
+      const { data } = await supabase
+        .from('proprietarios')
+        .select('id, user_id, nome, email, plano, ativo, created_at')
+        .order('created_at', { ascending: false });
+
+      allProprietarios = data || [];
+
+      // Contagem de imóveis por proprietário
+      const { data: imData } = await supabase.from('imoveis').select('proprietario_id');
+      const contagem = {};
+      (imData || []).forEach(im => {
+        contagem[im.proprietario_id] = (contagem[im.proprietario_id] || 0) + 1;
+      });
+
+      allProprietarios = allProprietarios.map(p => ({
+        ...p,
+        _imoveis: contagem[p.user_id] || 0
+      }));
+
+      renderProprietarios(allProprietarios);
+    }
+
+    function renderProprietarios(list) {
+      const tbody = document.getElementById('props-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="7">Nenhum proprietário encontrado</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(p => `
+        <tr>
+          <td><strong>${p.nome || '—'}</strong></td>
+          <td>${p.email || '—'}</td>
+          <td><span class="badge badge-${p.plano || 'basico'}">${p.plano || 'básico'}</span></td>
+          <td style="text-align:center">${p._imoveis}</td>
+          <td>${fmtDate(p.created_at)}</td>
+          <td><span class="badge badge-${p.ativo ? 'ativo' : 'inativo'}">${p.ativo ? 'Ativo' : 'Inativo'}</span></td>
+          <td>
+            <button class="btn btn-sm ${p.ativo ? 'btn-red' : 'btn-green'}"
+              onclick="toggleProp('${p.id}', ${p.ativo})">
+              ${p.ativo ? 'Desativar' : 'Ativar'}
+            </button>
+          </td>
+        </tr>`).join('');
+    }
+
+    window.filtrarProprietarios = function() {
+      const q = document.getElementById('prop-search').value.toLowerCase();
+      const f = allProprietarios.filter(p =>
+        (p.nome || '').toLowerCase().includes(q) ||
+        (p.email || '').toLowerCase().includes(q)
+      );
+      renderProprietarios(f);
+    };
+
+    window.toggleProp = async function(id, currentAtivo) {
+      const { error } = await supabase.from('proprietarios').update({ ativo: !currentAtivo }).eq('id', id);
+      if (error) { toast('Erro ao atualizar status', 'error'); return; }
+      toast(currentAtivo ? 'Proprietário desativado' : 'Proprietário ativado', 'success');
+      loadProprietarios();
+    };
+
+    window.exportarProprietariosCSV = function() {
+      const rows = [['Nome','Email','Plano','Imóveis','Cadastro','Ativo']];
+      allProprietarios.forEach(p => rows.push([p.nome, p.email, p.plano, p._imoveis, fmtDate(p.created_at), p.ativo ? 'Sim' : 'Não']));
+      downloadCSV(rows, 'proprietarios.csv');
+    };
+
+    // ── Leads ─────────────────────────────────────────────────────────
+    const SITUACAO_LABEL = {
+      tenho_imovel: 'Tenho imóvel',
+      pretendo_comprar: 'Pretende comprar',
+      ja_anuncio: 'Já anuncia',
+      outro: 'Outro'
+    };
+
+    async function loadLeads() {
+      const { data } = await supabase
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
+      allLeads = data || [];
+      renderLeads(allLeads);
+    }
+
+    function renderLeads(list) {
+      const tbody = document.getElementById('leads-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="7">Nenhum lead encontrado</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(l => `
+        <tr>
+          <td><strong>${l.nome}</strong></td>
+          <td style="font-size:0.78rem">${l.email}</td>
+          <td>${l.whatsapp || '—'}</td>
+          <td>${l.cidade || '—'}</td>
+          <td>${SITUACAO_LABEL[l.situacao] || l.situacao || '—'}</td>
+          <td>${fmtDate(l.created_at)}</td>
+          <td>
+            <select class="status-select" onchange="mudarStatusLead('${l.id}', this.value)">
+              ${['novo','em_contato','convertido','descartado'].map(s =>
+                `<option value="${s}" ${l.status === s ? 'selected' : ''}>${s.replace('_',' ')}</option>`
+              ).join('')}
+            </select>
+          </td>
+        </tr>`).join('');
+    }
+
+    window.filtrarLeads = function() {
+      const q  = document.getElementById('lead-search').value.toLowerCase();
+      const st = document.getElementById('lead-status-filter').value;
+      const f  = allLeads.filter(l =>
+        (!st || l.status === st) &&
+        ((l.nome || '').toLowerCase().includes(q) ||
+         (l.email || '').toLowerCase().includes(q) ||
+         (l.cidade || '').toLowerCase().includes(q))
+      );
+      renderLeads(f);
+    };
+
+    window.mudarStatusLead = async function(id, novoStatus) {
+      const { error } = await supabase.from('leads').update({ status: novoStatus }).eq('id', id);
+      if (error) { toast('Erro ao atualizar lead', 'error'); return; }
+      const idx = allLeads.findIndex(l => l.id === id);
+      if (idx !== -1) allLeads[idx].status = novoStatus;
+      toast('Status atualizado: ' + novoStatus, 'success');
+      document.getElementById('kpi-leads').textContent =
+        allLeads.filter(l => l.status === 'novo').length;
+    };
+
+    window.exportarLeadsCSV = function() {
+      const rows = [['Nome','Email','WhatsApp','Cidade','Tipo','Situação','Status','Data']];
+      allLeads.forEach(l => rows.push([l.nome, l.email, l.whatsapp, l.cidade, l.tipo, l.situacao, l.status, fmtDate(l.created_at)]));
+      downloadCSV(rows, 'leads.csv');
+    };
+
+    // Supabase Realtime — leads
+    function subscribeLeads() {
+      supabase
+        .channel('admin-leads')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, payload => {
+          if (payload.eventType === 'INSERT') {
+            allLeads.unshift(payload.new);
+            toast(`Novo lead: ${payload.new.nome}`, 'success');
+          } else if (payload.eventType === 'UPDATE') {
+            const idx = allLeads.findIndex(l => l.id === payload.new.id);
+            if (idx !== -1) allLeads[idx] = payload.new;
+          } else if (payload.eventType === 'DELETE') {
+            allLeads = allLeads.filter(l => l.id !== payload.old.id);
+          }
+          filtrarLeads();
+          document.getElementById('kpi-leads').textContent = allLeads.filter(l => l.status === 'novo').length;
+        })
+        .subscribe();
+    }
+
+    // ── Imóveis ───────────────────────────────────────────────────────
+    async function loadImoveis() {
+      const { data: imData } = await supabase
+        .from('imoveis')
+        .select('*, proprietarios(nome)')
+        .order('created_at', { ascending: false });
+
+      allImoveis = imData || [];
+      renderImoveis(allImoveis);
+    }
+
+    function renderImoveis(list) {
+      const tbody = document.getElementById('imoveis-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Nenhum imóvel encontrado</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(im => `
+        <tr>
+          <td><strong>${im.nome || '—'}</strong></td>
+          <td>${im.cidade || '—'}</td>
+          <td style="text-align:center">${im.quartos ?? '—'}</td>
+          <td>${fmtMoney(im.diaria_base)}</td>
+          <td style="font-size:0.78rem">${im.proprietarios?.nome || '—'}</td>
+          <td><span class="badge badge-${im.ativo ? 'ativo' : 'inativo'}">${im.ativo ? 'Ativo' : 'Inativo'}</span></td>
+        </tr>`).join('');
+    }
+
+    window.filtrarImoveis = function() {
+      const q = document.getElementById('imovel-search').value.toLowerCase();
+      renderImoveis(allImoveis.filter(im =>
+        (im.nome || '').toLowerCase().includes(q) ||
+        (im.cidade || '').toLowerCase().includes(q)
+      ));
+    };
+
+    window.exportarImoveisCSV = function() {
+      const rows = [['Nome','Cidade','Quartos','Diária Base','Proprietário','Ativo']];
+      allImoveis.forEach(im => rows.push([im.nome, im.cidade, im.quartos, im.diaria_base, im.proprietarios?.nome, im.ativo ? 'Sim' : 'Não']));
+      downloadCSV(rows, 'imoveis.csv');
+    };
+
+    // ── Relatórios ────────────────────────────────────────────────────
+    async function loadRelatorios() {
+      const { data: res } = await supabase
+        .from('reservas')
+        .select('*, imoveis(nome, cidade)')
+        .order('checkin', { ascending: false });
+
+      allReservas = res || [];
+
+      const ativas = allReservas.filter(r => r.status !== 'cancelada');
+      let bruta = 0, repasse = 0;
+      ativas.forEach(r => {
+        bruta   += (r.valor_total || 0);
+        repasse += (r.repasse_proprietario || 0);
+      });
+      const comissao = bruta - repasse;
+
+      document.getElementById('rel-reservas').textContent  = ativas.length;
+      document.getElementById('rel-bruta').textContent     = fmtMoneyShort(bruta);
+      document.getElementById('rel-repasse').textContent   = fmtMoneyShort(repasse);
+      document.getElementById('rel-comissao').textContent  = fmtMoneyShort(comissao);
+
+      renderReservas(allReservas);
+    }
+
+    function renderReservas(list) {
+      const tbody = document.getElementById('reservas-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="9">Nenhuma reserva encontrada</td></tr>';
+        return;
+      }
+
+      const STATUS_BADGE = {
+        confirmada: 'badge-ativo', checkin_feito: 'badge-em_contato',
+        checkout_feito: 'badge-descartado', cancelada: 'badge-descartado',
+        pendente: 'badge-novo'
+      };
+
+      tbody.innerHTML = list.map(r => {
+        const noites = r.noites || Math.round((new Date(r.checkout) - new Date(r.checkin)) / 86400000) || '—';
+        const comissao = (r.valor_total || 0) - (r.repasse_proprietario || 0);
+        return `<tr>
+          <td><strong>${r.nome_hospede || '—'}</strong></td>
+          <td style="font-size:0.78rem">${r.imoveis?.nome || '—'}</td>
+          <td>${fmtDate(r.checkin)}</td>
+          <td>${fmtDate(r.checkout)}</td>
+          <td style="text-align:center">${noites}</td>
+          <td>${fmtMoney(r.valor_total)}</td>
+          <td>${fmtMoney(r.repasse_proprietario)}</td>
+          <td style="color:#D97706;font-weight:500">${fmtMoney(comissao)}</td>
+          <td><span class="badge ${STATUS_BADGE[r.status] || 'badge-novo'}">${r.status || '—'}</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    window.exportarReservasCSV = function() {
+      const rows = [['Hóspede','Imóvel','Check-in','Check-out','Noites','Valor Total','Repasse','Comissão','Status']];
+      allReservas.forEach(r => {
+        const n = r.noites || Math.round((new Date(r.checkout) - new Date(r.checkin)) / 86400000);
+        rows.push([r.nome_hospede, r.imoveis?.nome, r.checkin, r.checkout, n, r.valor_total, r.repasse_proprietario, (r.valor_total||0)-(r.repasse_proprietario||0), r.status]);
+      });
+      downloadCSV(rows, 'reservas.csv');
+    };
+
+    // ── CSV util ──────────────────────────────────────────────────────
+    function downloadCSV(rows, filename) {
+      const csv = rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Logout ────────────────────────────────────────────────────────
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = '/login.html';
+    });
+
+    // ── Lazy load sections ────────────────────────────────────────────
+    const loaded = {};
+
+    document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const s = btn.dataset.section;
+        if (loaded[s]) return;
+        loaded[s] = true;
+        if (s === 'proprietarios') await loadProprietarios();
+        if (s === 'leads')         await loadLeads();
+        if (s === 'imoveis')       await loadImoveis();
+        if (s === 'relatorios')    await loadRelatorios();
+      });
+    });
+
+    // ── Init ──────────────────────────────────────────────────────────
+    (async () => {
+      const user = await checkAuth();
+      if (!user) return;
+
+      // Show UI
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('sidebar').style.display = 'flex';
+      document.getElementById('main').style.display = 'block';
+
+      // Set user info
+      document.getElementById('topbar-email').textContent = user.email;
+      document.getElementById('admin-email-label').textContent = user.email;
+      document.getElementById('user-initials').textContent = (user.email[0] || 'A').toUpperCase();
+
+      // Load dashboard + subscribe realtime
+      loaded.dashboard = true;
+      await loadDashboard();
+      subscribeLeads();
+    })();
+  </script>
+</body>
+</html>
