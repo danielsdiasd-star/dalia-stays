@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Dynamic meta — overwritten by JS -->
+  <title>Carregando artigo… | Dália Stays</title>
+  <meta name="description" content="" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" id="meta-canonical" href="https://daliastays.com/blog/artigo.html" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Dália Stays" />
+  <meta property="og:title" id="og-title" content="" />
+  <meta property="og:description" id="og-desc" content="" />
+  <meta property="og:url" id="og-url" content="" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" id="tw-title" content="" />
+  <meta name="twitter:description" id="tw-desc" content="" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:   #FAFAF8;
+      --black:   #0A0A0A;
+      --gold:    #B8973A;
+      --gold-lt: #C9A84C;
+      --green:   #1A2E2A;
+      --green-lt:#2A4A44;
+      --gray:    #6B6B6B;
+      --gray-lt: #E8E8E4;
+      --text:    #1C1C1A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,151,58,0.15);
+    }
+
+    .header-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .header-nav a {
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      color: rgba(250,250,248,0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover { color: var(--gold-lt); }
+
+    .btn-painel {
+      padding: 0.45rem 1rem;
+      background: var(--gold-lt);
+      color: var(--green);
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+
+    .btn-painel:hover { background: var(--gold); }
+
+    /* ── Article Layout ── */
+    .article-wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 7rem 2rem 6rem;
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .breadcrumb a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover { color: var(--gold-lt); }
+
+    .breadcrumb span { opacity: 0.5; }
+
+    /* ── Article Header ── */
+    .article-header { margin-bottom: 2.5rem; }
+
+    .article-category {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--green);
+      margin-bottom: 1.25rem;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.8rem;
+      color: var(--gray);
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--gray-lt);
+    }
+
+    .article-meta strong { color: var(--text); font-weight: 500; }
+
+    .meta-dot { opacity: 0.3; }
+
+    /* ── Article Body ── */
+    .article-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #2c2c2a;
+    }
+
+    .article-body h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--green);
+      margin: 2.5rem 0 1rem;
+      line-height: 1.3;
+    }
+
+    .article-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--green);
+      margin: 2rem 0 0.75rem;
+    }
+
+    .article-body p { margin-bottom: 1.25rem; }
+
+    .article-body ul,
+    .article-body ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .article-body li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .article-body strong { color: var(--green); font-weight: 500; }
+
+    .article-body blockquote {
+      border-left: 3px solid var(--gold-lt);
+      padding: 0.75rem 1.5rem;
+      margin: 2rem 0;
+      background: rgba(201,168,76,0.06);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--gray);
+    }
+
+    /* ── CTA Box ── */
+    .article-cta {
+      background: var(--green);
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+
+    .article-cta p {
+      font-size: 0.88rem;
+      color: rgba(250,250,248,0.72);
+      margin-bottom: 0.5rem;
+    }
+
+    .article-cta h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: var(--gold-lt);
+      color: var(--green);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-cta:hover { background: var(--gold); }
+
+    /* ── Back link ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--gold-lt);
+      text-decoration: none;
+      margin-top: 3rem;
+      transition: gap 0.2s;
+    }
+
+    .back-link:hover { gap: 0.65rem; }
+
+    /* ── Loading / Error ── */
+    .state-center {
+      text-align: center;
+      padding: 6rem 2rem;
+    }
+
+    .state-center h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--green);
+      margin-bottom: 0.6rem;
+    }
+
+    .state-center p { font-size: 0.9rem; color: var(--gray); }
+
+    .skeleton {
+      background: linear-gradient(90deg, #f0efeb 25%, #e8e7e2 50%, #f0efeb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--black);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    footer p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    @media (max-width: 760px) {
+      header { padding: 1rem 1.5rem; }
+      .header-nav { display: none; }
+      .article-wrapper { padding: 6rem 1.25rem 4rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="header-logo">Dália Stays</a>
+    <nav class="header-nav">
+      <a href="/">Início</a>
+      <a href="/#services">Serviços</a>
+      <a href="/analise-gratuita.html">Análise Gratuita</a>
+      <a href="/blog/">Blog</a>
+      <a href="/login.html" class="btn-painel">Área do Proprietário</a>
+    </nav>
+  </header>
+
+  <main class="article-wrapper" id="article-wrapper">
+    <!-- Loading skeleton -->
+    <div id="state-loading">
+      <div class="skeleton" style="height:12px;width:30%;margin-bottom:1.5rem"></div>
+      <div class="skeleton" style="height:14px;width:18%;margin-bottom:1rem"></div>
+      <div class="skeleton" style="height:42px;margin-bottom:12px"></div>
+      <div class="skeleton" style="height:42px;width:70%;margin-bottom:1.5rem"></div>
+      <div class="skeleton" style="height:10px;width:50%;margin-bottom:2.5rem"></div>
+      <div class="skeleton" style="height:14px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:14px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:14px;width:85%;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:14px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:14px;width:60%;margin-bottom:2rem"></div>
+      <div class="skeleton" style="height:28px;width:55%;margin-bottom:1rem"></div>
+      <div class="skeleton" style="height:14px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:14px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:14px;width:75%"></div>
+    </div>
+
+    <!-- Article content — injected by JS -->
+    <div id="state-article" style="display:none"></div>
+
+    <!-- Error state -->
+    <div id="state-error" style="display:none" class="state-center">
+      <h2>Artigo não encontrado</h2>
+      <p>O artigo que você procura não existe ou foi removido.</p>
+      <a href="/blog/" class="back-link" style="margin-top:1.5rem">← Voltar ao blog</a>
+    </div>
+  </main>
+
+  <footer>
+    <a href="/" class="footer-logo">Dália Stays</a>
+    <p>&copy; 2026 Dália Stays · Curadoria Premium por Temporada · contato@daliastays.com</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://gjxrhocbqnfoybuqwpbf.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqeHJob2NicW5mb3lidXF3cGJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNDMyMTIsImV4cCI6MjA1NzgxOTIxMn0.UtS5cBq-oKvjuJSon_SPIU0oHKioBTxz35wh0PGVDHA';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    }
+
+    function show(id) {
+      ['state-loading','state-article','state-error'].forEach(s => {
+        document.getElementById(s).style.display = s === id ? 'block' : 'none';
+      });
+    }
+
+    function updateMeta(artigo) {
+      document.title = artigo.titulo + ' | Dália Stays';
+      document.querySelector('meta[name="description"]').content = artigo.meta_description;
+      const url = 'https://daliastays.com/blog/artigo.html?slug=' + encodeURIComponent(artigo.slug);
+      document.getElementById('meta-canonical').href = url;
+      document.getElementById('og-title').content = artigo.titulo;
+      document.getElementById('og-desc').content = artigo.meta_description;
+      document.getElementById('og-url').content = url;
+      document.getElementById('tw-title').content = artigo.titulo;
+      document.getElementById('tw-desc').content = artigo.meta_description;
+    }
+
+    function renderArticle(a) {
+      updateMeta(a);
+
+      const html = `
+        <nav class="breadcrumb">
+          <a href="/">Início</a>
+          <span>/</span>
+          <a href="/blog/">Blog</a>
+          <span>/</span>
+          <span style="color:#1C1C1A;opacity:0.75">${a.titulo.substring(0, 42)}${a.titulo.length > 42 ? '…' : ''}</span>
+        </nav>
+
+        <header class="article-header">
+          <div class="article-category">Investimentos &amp; STR · Dália Stays</div>
+          <h1 class="article-title">${a.titulo}</h1>
+          <div class="article-meta">
+            <strong>Equipe Dália Stays</strong>
+            <span class="meta-dot">·</span>
+            <span>${formatDate(a.created_at)}</span>
+            <span class="meta-dot">·</span>
+            <span>${a.tempo_leitura || 5} min de leitura</span>
+          </div>
+        </header>
+
+        <div class="article-body">
+          ${a.conteudo_html}
+        </div>
+
+        <div class="article-cta">
+          <p>Quer saber o potencial do seu imóvel?</p>
+          <h3>Receba uma análise gratuita de rentabilidade</h3>
+          <a href="/analise-gratuita.html" class="btn-cta">Solicitar análise gratuita</a>
+        </div>
+
+        <a href="/blog/" class="back-link">← Voltar ao blog</a>`;
+
+      document.getElementById('state-article').innerHTML = html;
+      show('state-article');
+
+      // Inject JSON-LD
+      const ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": a.titulo,
+        "description": a.meta_description,
+        "datePublished": a.created_at,
+        "author": { "@type": "Organization", "name": "Dália Stays" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Dália Stays",
+          "url": "https://daliastays.com/"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://daliastays.com/blog/artigo.html?slug=" + encodeURIComponent(a.slug)
+        }
+      });
+      document.body.appendChild(ld);
+    }
+
+    async function load() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+
+      if (!slug) { show('state-error'); return; }
+
+      try {
+        const { data, error } = await supabase
+          .from('artigos')
+          .select('*')
+          .eq('slug', slug)
+          .eq('publicado', true)
+          .single();
+
+        if (error || !data) { show('state-error'); return; }
+
+        renderArticle(data);
+      } catch (e) {
+        console.error(e);
+        show('state-error');
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

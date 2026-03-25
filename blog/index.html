@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog | Dália Stays — Investimentos em Aluguel por Temporada</title>
+
+  <meta name="description" content="Conteúdo exclusivo sobre mercado de aluguel por temporada no Brasil: revenue management, melhores regiões para investir, estratégias de precificação e muito mais." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://daliastays.com/blog/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Dália Stays" />
+  <meta property="og:title" content="Blog Dália Stays | Investimentos em Aluguel por Temporada" />
+  <meta property="og:description" content="Conteúdo exclusivo sobre mercado de aluguel por temporada no Brasil." />
+  <meta property="og:url" content="https://daliastays.com/blog/" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:   #FAFAF8;
+      --black:   #0A0A0A;
+      --gold:    #B8973A;
+      --gold-lt: #C9A84C;
+      --green:   #1A2E2A;
+      --green-lt:#2A4A44;
+      --gray:    #6B6B6B;
+      --gray-lt: #E8E8E4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,151,58,0.15);
+    }
+
+    .header-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .header-nav a {
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      color: rgba(250,250,248,0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover,
+    .header-nav a.active { color: var(--gold-lt); }
+
+    .btn-painel {
+      padding: 0.45rem 1rem;
+      background: var(--gold-lt);
+      color: var(--green);
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+
+    .btn-painel:hover { background: var(--gold); }
+
+    /* ── Hero Banner ── */
+    .blog-hero {
+      background: var(--green);
+      padding: 7rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=60') center/cover no-repeat;
+      opacity: 0.08;
+    }
+
+    .blog-hero-inner {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .blog-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.22;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .blog-hero h1 em { font-style: italic; color: var(--gold-lt); }
+
+    .blog-hero p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(250,250,248,0.68);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── Articles Grid ── */
+    .blog-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 3rem 6rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--gray-lt);
+      padding-bottom: 1.25rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--green);
+    }
+
+    #artigos-count {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    /* ── Article Card ── */
+    .article-card {
+      background: #fff;
+      border: 1px solid #eeede8;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.25s, transform 0.25s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-card:hover {
+      box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+    }
+
+    .card-thumb {
+      height: 180px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-lt) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-thumb-icon {
+      font-size: 2.5rem;
+      opacity: 0.5;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-meta {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-meta span { color: var(--gray); font-size: 0.72rem; letter-spacing: 0; text-transform: none; }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--green);
+      margin-bottom: 0.65rem;
+    }
+
+    .card-desc {
+      font-size: 0.84rem;
+      line-height: 1.6;
+      color: var(--gray);
+      flex: 1;
+      margin-bottom: 1.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-link {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gold-lt);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: gap 0.2s;
+    }
+
+    .article-card:hover .card-link { gap: 0.55rem; }
+
+    /* ── Empty / Loading states ── */
+    .state-box {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+
+    .state-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.25rem;
+      opacity: 0.45;
+    }
+
+    .state-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--green);
+      margin-bottom: 0.6rem;
+    }
+
+    .state-box p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      max-width: 440px;
+      margin: 0 auto 2rem;
+      line-height: 1.65;
+    }
+
+    .btn-analise {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: var(--green);
+      color: var(--white);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-analise:hover { background: var(--green-lt); }
+
+    .skeleton {
+      background: linear-gradient(90deg, #f0efeb 25%, #e8e7e2 50%, #f0efeb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--black);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    footer p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .articles-grid { grid-template-columns: repeat(2, 1fr); }
+      header { padding: 1rem 1.5rem; }
+      .header-nav { display: none; }
+      .blog-hero { padding: 6rem 1.5rem 3rem; }
+      .blog-main { padding: 3rem 1.5rem 5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .articles-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="header-logo">Dália Stays</a>
+    <nav class="header-nav">
+      <a href="/">Início</a>
+      <a href="/#services">Serviços</a>
+      <a href="/#market">Mercado</a>
+      <a href="/#calculator">Calculadora</a>
+      <a href="/analise-gratuita.html">Análise Gratuita</a>
+      <a href="/blog/" class="active">Blog</a>
+      <a href="/login.html" class="btn-painel">Área do Proprietário</a>
+    </nav>
+  </header>
+
+  <section class="blog-hero">
+    <div class="blog-hero-inner">
+      <span class="hero-badge">Conteúdo exclusivo</span>
+      <h1>Tudo sobre <em>aluguel por temporada</em><br />no Brasil</h1>
+      <p>Estratégias de revenue management, melhores regiões para investir, precificação dinâmica e muito mais — direto dos especialistas da Dália Stays.</p>
+    </div>
+  </section>
+
+  <main class="blog-main">
+    <div class="section-header">
+      <h2>Artigos Recentes</h2>
+      <span id="artigos-count"></span>
+    </div>
+
+    <div class="articles-grid" id="articles-grid">
+      <!-- Loading skeletons -->
+      <div class="article-card" style="pointer-events:none">
+        <div class="card-thumb skeleton" style="height:180px"></div>
+        <div class="card-body">
+          <div class="skeleton" style="height:12px;width:40%;margin-bottom:12px"></div>
+          <div class="skeleton" style="height:22px;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:22px;width:70%;margin-bottom:16px"></div>
+          <div class="skeleton" style="height:12px;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:80%"></div>
+        </div>
+      </div>
+      <div class="article-card" style="pointer-events:none">
+        <div class="card-thumb skeleton" style="height:180px"></div>
+        <div class="card-body">
+          <div class="skeleton" style="height:12px;width:40%;margin-bottom:12px"></div>
+          <div class="skeleton" style="height:22px;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:22px;width:70%;margin-bottom:16px"></div>
+          <div class="skeleton" style="height:12px;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:80%"></div>
+        </div>
+      </div>
+      <div class="article-card" style="pointer-events:none">
+        <div class="card-thumb skeleton" style="height:180px"></div>
+        <div class="card-body">
+          <div class="skeleton" style="height:12px;width:40%;margin-bottom:12px"></div>
+          <div class="skeleton" style="height:22px;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:22px;width:70%;margin-bottom:16px"></div>
+          <div class="skeleton" style="height:12px;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:80%"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="/" class="footer-logo">Dália Stays</a>
+    <p>&copy; 2026 Dália Stays · Curadoria Premium por Temporada · contato@daliastays.com</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://gjxrhocbqnfoybuqwpbf.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqeHJob2NicW5mb3lidXF3cGJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNDMyMTIsImV4cCI6MjA1NzgxOTIxMn0.UtS5cBq-oKvjuJSon_SPIU0oHKioBTxz35wh0PGVDHA';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    const ICONS = ['🏡','📊','💰','🏖️','📈','🌴','🔑','🏙️','✦','🛎️'];
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    }
+
+    function renderEmpty() {
+      document.getElementById('articles-grid').innerHTML = `
+        <div class="state-box">
+          <div class="state-icon">✦</div>
+          <h3>Em breve: conteúdo exclusivo</h3>
+          <p>Estamos preparando artigos sobre investimentos em aluguel por temporada, revenue management e as melhores regiões do Brasil para comprar imóvel.</p>
+          <a href="/analise-gratuita.html" class="btn-analise">Solicitar análise gratuita enquanto isso</a>
+        </div>`;
+    }
+
+    function renderError() {
+      document.getElementById('articles-grid').innerHTML = `
+        <div class="state-box">
+          <div class="state-icon">⚠</div>
+          <h3>Não foi possível carregar os artigos</h3>
+          <p>Tente recarregar a página ou volte em instantes.</p>
+        </div>`;
+    }
+
+    function renderCards(artigos) {
+      const grid = document.getElementById('articles-grid');
+      grid.innerHTML = artigos.map((a, i) => `
+        <a href="/blog/artigo.html?slug=${encodeURIComponent(a.slug)}" class="article-card">
+          <div class="card-thumb">
+            <span class="card-thumb-icon">${ICONS[i % ICONS.length]}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              Investimentos &amp; STR
+              <span>${formatDate(a.created_at)}</span>
+              <span>· ${a.tempo_leitura || 5} min</span>
+            </div>
+            <h3 class="card-title">${a.titulo}</h3>
+            <p class="card-desc">${a.meta_description}</p>
+            <span class="card-link">Ler artigo →</span>
+          </div>
+        </a>`).join('');
+    }
+
+    async function load() {
+      try {
+        const { data, error } = await supabase
+          .from('artigos')
+          .select('slug, titulo, meta_description, tempo_leitura, created_at')
+          .eq('publicado', true)
+          .order('created_at', { ascending: false })
+          .limit(30);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          renderEmpty();
+          return;
+        }
+
+        document.getElementById('artigos-count').textContent = `${data.length} artigo${data.length !== 1 ? 's' : ''}`;
+        renderCards(data);
+      } catch (e) {
+        console.error(e);
+        renderError();
+      }
+    }
+
+    load();
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Blog Dália Stays",
+    "description": "Conteúdo exclusivo sobre mercado de aluguel por temporada no Brasil",
+    "url": "https://daliastays.com/blog/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Dália Stays",
+      "url": "https://daliastays.com/"
+    }
+  }
+  </script>
+</body>
+</html>

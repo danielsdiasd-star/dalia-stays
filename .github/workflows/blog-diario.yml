@@ -1,0 +1,101 @@
+name: Blog Diário — Gerar Artigo STR
+
+on:
+  schedule:
+    # 11:00 UTC = 08:00 BRT (Brasília, UTC-3)
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+    inputs:
+      tema:
+        description: 'Tema do artigo (deixe vazio para escolha aleatória)'
+        required: false
+        default: ''
+
+jobs:
+  gerar-artigo:
+    name: Gerar e publicar artigo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Escolher tema aleatório
+        id: tema
+        run: |
+          TEMAS=(
+            "Como calcular a rentabilidade de um imóvel por temporada no Brasil"
+            "Revenue management para Airbnb: precificação dinâmica que funciona"
+            "Melhores regiões do Rio de Janeiro para investir em aluguel por temporada"
+            "Cabo Frio e Região dos Lagos: guia completo de investimento em STR"
+            "Como montar uma propriedade de temporada do zero em 2026"
+            "Taxa de ocupação ideal para imóveis de temporada: o que os dados dizem"
+            "Airbnb vs Booking: qual plataforma gera mais receita no Brasil"
+            "Gestão profissional de aluguel por temporada: vale a pena contratar?"
+            "Fotografia imobiliária para temporada: como aumentar reservas em 40%"
+            "Sazonalidade no aluguel por temporada: como maximizar receita o ano todo"
+            "Florianópolis para investidores: mercado de temporada em alta"
+            "Nordeste brasileiro: destinos emergentes de aluguel por temporada"
+            "Como definir a diária certa para seu imóvel no Airbnb"
+            "Decoração estratégica para imóveis de temporada: o que realmente importa"
+            "Check-in e check-out: automação que melhora a nota dos hóspedes"
+            "Gestão de avaliações no Airbnb: como manter nota 4.9"
+            "Imóvel para temporada em condomínio: regras e estratégias"
+            "Tributação do aluguel por temporada no Brasil em 2026"
+            "Seguros para imóveis de temporada: o que você precisa saber"
+            "Como criar um anúncio perfeito no Airbnb do zero"
+            "Buzios, Arraial do Cabo e Ilha Grande: análise do mercado STR"
+            "Custo de manutenção de imóvel de temporada: tudo que você precisa calcular"
+            "Asset management imobiliário: como gerenciar múltiplos imóveis de temporada"
+            "Hóspedes internacionais no Brasil: como atrair turistas estrangeiros"
+            "Apartamento compacto para temporada: como maximizar a renda em espaços pequenos"
+            "Tendências do mercado de aluguel por temporada no Brasil para 2026"
+            "Como transformar segunda residência em fonte de renda com aluguel por temporada"
+            "Limpeza e higienização profissional: o segredo das propriedades 5 estrelas"
+            "Amenities que fazem diferença: o que hóspedes realmente valorizam"
+            "ROI de imóvel por temporada vs aluguel tradicional: comparação completa"
+          )
+
+          if [ -n "${{ github.event.inputs.tema }}" ]; then
+            TEMA="${{ github.event.inputs.tema }}"
+          else
+            IDX=$(( RANDOM % ${#TEMAS[@]} ))
+            TEMA="${TEMAS[$IDX]}"
+          fi
+
+          echo "tema=$TEMA" >> $GITHUB_OUTPUT
+          echo "Tema escolhido: $TEMA"
+
+      - name: Gerar artigo com Claude Haiku
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          node scripts/gerar-artigo.js "${{ steps.tema.outputs.tema }}"
+
+      - name: Commit e push (atualiza lastmod do sitemap)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Atualiza data do sitemap para refletir novo conteúdo
+          TODAY=$(date -u +%Y-%m-%d)
+          sed -i "s|<lastmod>[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}</lastmod>|<lastmod>${TODAY}</lastmod>|g" sitemap.xml 2>/dev/null || true
+
+          git add sitemap.xml
+
+          # Só commita se houver mudança
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração para commitar."
+          else
+            git commit -m "chore: atualiza sitemap após novo artigo — $(date -u +'%Y-%m-%d')"
+            git push
+          fi
