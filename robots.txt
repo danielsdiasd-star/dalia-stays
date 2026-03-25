@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /painel-proprietario.html
+Disallow: /login.html
+Disallow: /cadastro.html
+Disallow: /update-password.html
+Sitemap: https://daliastays.com/sitemap.xml

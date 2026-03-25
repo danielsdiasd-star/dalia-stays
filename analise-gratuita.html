@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise Gratuita de Rentabilidade | Dália Stays</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Receba gratuitamente uma análise personalizada de rentabilidade para seu imóvel de temporada. Avaliamos diária média, ocupação estimada e renda mensal potencial em qualquer região do Brasil." />
+  <meta name="keywords" content="análise gratuita rentabilidade temporada, potencial de renda airbnb, imóvel temporada rentabilidade, quanto rende imóvel temporada" />
+  <meta name="author" content="Dália Stays" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://daliastays.com/analise-gratuita.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Dália Stays" />
+  <meta property="og:title" content="Análise Gratuita de Rentabilidade | Dália Stays" />
+  <meta property="og:description" content="Descubra o potencial de renda do seu imóvel por temporada. Análise personalizada e gratuita com diária média, taxa de ocupação e renda mensal estimada." />
+  <meta property="og:url" content="https://daliastays.com/analise-gratuita.html" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Análise Gratuita de Rentabilidade | Dália Stays" />
+  <meta name="twitter:description" content="Descubra o potencial de renda do seu imóvel por temporada. Análise gratuita e personalizada." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:   #FAFAF8;
+      --black:   #0A0A0A;
+      --gold:    #B8973A;
+      --gold-lt: #C9A84C;
+      --green:   #1A2E2A;
+      --green-lt:#2A4A44;
+      --gray:    #6B6B6B;
+      --gray-lt: #D4D4D0;
+      --ease:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,151,58,0.15);
+    }
+
+    .header-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .header-nav { display: flex; align-items: center; gap: 2rem; }
+
+    .header-nav a {
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      color: rgba(250,250,248,0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover { color: var(--gold-lt); }
+
+    .btn-painel {
+      padding: 0.45rem 1rem;
+      background: var(--gold-lt);
+      color: var(--green);
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+
+    .btn-painel:hover { background: var(--gold); }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--green);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=70') center/cover no-repeat;
+      opacity: 0.12;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8rem 3rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(250,250,248,0.72);
+      margin-bottom: 2rem;
+    }
+
+    .hero-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .hero-bullets li {
+      font-size: 0.88rem;
+      color: rgba(250,250,248,0.8);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-bullets li::before {
+      content: '✦';
+      color: var(--gold-lt);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Form Card ─────────────────────────────────────────────── */
+    .form-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+    }
+
+    .form-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--green);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-card .subtitle {
+      font-size: 0.82rem;
+      color: var(--gray);
+      margin-bottom: 1.75rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--green);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--gray-lt);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--black);
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold-lt);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 1.25rem;
+    }
+
+    .btn-submit:hover { background: var(--green-lt); }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .form-note {
+      font-size: 0.74rem;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+
+    /* ── Success State ─────────────────────────────────────────── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: #f0faf4;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-size: 1.5rem;
+    }
+
+    .success-state h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+
+    .success-state p {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ── Why Section ──────────────────────────────────────────── */
+    .why {
+      padding: 5rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--black);
+      margin-bottom: 3rem;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .why-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .why-card:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      transform: translateY(-3px);
+    }
+
+    .why-icon {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .why-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+
+    .why-card p {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.65;
+    }
+
+    /* ── Social Proof ─────────────────────────────────────────── */
+    .proof {
+      background: var(--green);
+      padding: 5rem 3rem;
+    }
+
+    .proof-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .proof-inner .section-label { color: rgba(201,168,76,0.8); }
+    .proof-inner .section-title { color: var(--white); margin-bottom: 2.5rem; }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .proof-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+
+    .stars {
+      color: var(--gold-lt);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    .proof-card blockquote {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: rgba(250,250,248,0.82);
+      font-style: italic;
+      margin-bottom: 1.25rem;
+    }
+
+    .proof-author {
+      font-size: 0.8rem;
+      color: rgba(250,250,248,0.5);
+    }
+
+    .proof-author strong {
+      display: block;
+      color: rgba(250,250,248,0.9);
+      font-style: normal;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    /* ── CTA Banner ───────────────────────────────────────────── */
+    .cta-banner {
+      padding: 5rem 3rem;
+      text-align: center;
+      background: linear-gradient(135deg, #f8f5ee 0%, var(--white) 100%);
+    }
+
+    .cta-banner .section-title { margin-bottom: 1rem; }
+
+    .cta-banner p {
+      font-size: 1rem;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--green);
+      color: var(--white);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-cta:hover { background: var(--green-lt); transform: translateY(-2px); }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    footer p {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ── Error msg ────────────────────────────────────────────── */
+    .field-error {
+      font-size: 0.74rem;
+      color: #c0392b;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; padding: 7rem 1.5rem 3rem; }
+      .why-grid { grid-template-columns: 1fr; }
+      .proof-grid { grid-template-columns: 1fr; }
+      header { padding: 1rem 1.5rem; }
+      .header-nav { display: none; }
+      .why, .proof-inner { padding: 3.5rem 1.5rem; }
+      .cta-banner { padding: 3.5rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="/" class="header-logo">Dália Stays</a>
+    <nav class="header-nav">
+      <a href="/#about">Sobre</a>
+      <a href="/#services">Serviços</a>
+      <a href="/#market">Mercado</a>
+      <a href="/#calculator">Calculadora</a>
+      <a href="/#contato">Contato</a>
+      <a href="/login.html" class="btn-painel">Área do Proprietário</a>
+    </nav>
+  </header>
+
+  <!-- Hero + Form -->
+  <section class="hero">
+    <div class="hero-inner">
+      <!-- Left copy -->
+      <div>
+        <span class="hero-badge">100% gratuito · sem compromisso</span>
+        <h1>Descubra o <em>potencial real</em> do seu imóvel por temporada</h1>
+        <p class="hero-desc">
+          Em menos de 48 horas nossa equipe entrega uma análise personalizada com diária média,
+          taxa de ocupação estimada e renda mensal potencial — sem enrolação.
+        </p>
+        <ul class="hero-bullets">
+          <li>Avaliação baseada em dados reais do mercado</li>
+          <li>Comparativo com imóveis similares na região</li>
+          <li>Projeção de rentabilidade anual</li>
+          <li>Recomendações de melhoria e posicionamento</li>
+          <li>Nenhum custo ou obrigação de contratação</li>
+        </ul>
+      </div>
+
+      <!-- Form -->
+      <div class="form-card" id="form-card">
+        <h2>Solicitar Análise Gratuita</h2>
+        <p class="subtitle">Preencha os dados abaixo — retornamos em até 48h</p>
+
+        <form id="lead-form" novalidate>
+          <div class="form-group">
+            <label for="nome">Seu nome *</label>
+            <input type="text" id="nome" name="nome" placeholder="Maria Silva" autocomplete="name" />
+            <div class="field-error" id="err-nome"></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">E-mail *</label>
+              <input type="email" id="email" name="email" placeholder="maria@email.com" autocomplete="email" />
+              <div class="field-error" id="err-email"></div>
+            </div>
+            <div class="form-group">
+              <label for="whatsapp">WhatsApp *</label>
+              <input type="tel" id="whatsapp" name="whatsapp" placeholder="(21) 99999-0000" autocomplete="tel" />
+              <div class="field-error" id="err-whatsapp"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cidade">Cidade do imóvel *</label>
+              <input type="text" id="cidade" name="cidade" placeholder="Rio de Janeiro" />
+              <div class="field-error" id="err-cidade"></div>
+            </div>
+            <div class="form-group">
+              <label for="tipo">Tipo de imóvel *</label>
+              <select id="tipo" name="tipo">
+                <option value="">Selecione…</option>
+                <option value="apartamento">Apartamento</option>
+                <option value="casa">Casa</option>
+                <option value="studio">Studio / Kitnet</option>
+                <option value="cobertura">Cobertura</option>
+                <option value="chacara">Chácara / Sítio</option>
+                <option value="outro">Outro</option>
+              </select>
+              <div class="field-error" id="err-tipo"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="situacao">Situação atual *</label>
+            <select id="situacao" name="situacao">
+              <option value="">Selecione…</option>
+              <option value="tenho_imovel">Já tenho imóvel e quero gerir</option>
+              <option value="pretendo_comprar">Pretendo comprar para temporada</option>
+              <option value="ja_anuncio">Já anuncio mas quero melhorar resultados</option>
+              <option value="outro">Outra situação</option>
+            </select>
+            <div class="field-error" id="err-situacao"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="mensagem">Mensagem (opcional)</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Conta mais sobre seu imóvel ou sua dúvida…"></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-submit">Quero minha análise gratuita</button>
+          <p class="form-note">Seus dados são confidenciais e não serão compartilhados.</p>
+        </form>
+
+        <!-- Success state -->
+        <div class="success-state" id="success-state">
+          <div class="success-icon">✦</div>
+          <h3>Solicitação recebida!</h3>
+          <p>
+            Obrigado, <strong id="success-nome"></strong>!<br />
+            Nossa equipe analisará seu imóvel e entrará em contato<br />
+            pelo WhatsApp informado em até <strong>48 horas</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why section -->
+  <section class="why">
+    <p class="section-label">Por que a Dália Stays</p>
+    <h2 class="section-title">Uma curadoria que maximiza<br />cada reserva do seu imóvel</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">📊</div>
+        <h3>Revenue Management Real</h3>
+        <p>Precificação dinâmica baseada em dados de demanda, sazonalidade e concorrência local — para nunca deixar dinheiro na mesa.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏡</div>
+        <h3>Curadoria de Experiência</h3>
+        <p>Fotografia profissional, copywriting de anúncios otimizados e decoração orientada por conversão para maximizar a taxa de ocupação.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💼</div>
+        <h3>Asset Management Completo</h3>
+        <p>Cuidamos de tudo — reservas, hóspedes, limpeza, manutenção e repasses — para que seu imóvel trabalhe por você.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="proof">
+    <div class="proof-inner">
+      <p class="section-label">O que dizem nossos proprietários</p>
+      <h2 class="section-title">Resultados que falam por si</h2>
+      <div class="proof-grid">
+        <div class="proof-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>
+            "Antes da Dália eu ficava meses sem ocupação. Hoje meu apartamento no Flamengo tem mais de 80% de ocupação nos meses de alta temporada. A análise gratuita foi o que me convenceu a contratar."
+          </blockquote>
+          <p class="proof-author">
+            <strong>Fernanda M.</strong>
+            Proprietária · Flamengo, Rio de Janeiro
+          </p>
+        </div>
+        <div class="proof-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>
+            "Comprei meu imóvel em Cabo Frio especificamente para temporada, baseado na análise de rentabilidade que a Dália me enviou. Em 8 meses já recuperei 30% do investimento."
+          </blockquote>
+          <p class="proof-author">
+            <strong>Roberto A.</strong>
+            Investidor · Cabo Frio, RJ
+          </p>
+        </div>
+        <div class="proof-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>
+            "A diferença no cuidado com os hóspedes é impressionante. Minha nota no Airbnb foi de 4.2 para 4.9 em três meses. E a renda aumentou mais de 40% comparado à gestão anterior."
+          </blockquote>
+          <p class="proof-author">
+            <strong>Carla B.</strong>
+            Proprietária · Ipanema, Rio de Janeiro
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
+    <p class="section-label">Próximo passo</p>
+    <h2 class="section-title">Pronto para descobrir o potencial<br />do seu imóvel?</h2>
+    <p>Análise gratuita, sem compromisso. Nossa equipe retorna em até 48 horas.</p>
+    <a href="#" class="btn-cta" onclick="document.getElementById('lead-form').scrollIntoView({behavior:'smooth'}); return false;">Solicitar análise gratuita</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <a href="/" class="footer-logo">Dália Stays</a>
+    <p>&copy; 2026 Dália Stays · Curadoria Premium por Temporada · contato@daliastays.com</p>
+  </footer>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script type="module">
+    const SUPABASE_URL = 'https://gjxrhocbqnfoybuqwpbf.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqeHJob2NicW5mb3lidXF3cGJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNDMyMTIsImV4cCI6MjA1NzgxOTIxMn0.UtS5cBq-oKvjuJSon_SPIU0oHKioBTxz35wh0PGVDHA';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    const form = document.getElementById('lead-form');
+    const btn = document.getElementById('btn-submit');
+
+    function clearErrors() {
+      ['nome','email','whatsapp','cidade','tipo','situacao'].forEach(f => {
+        document.getElementById('err-' + f).textContent = '';
+      });
+    }
+
+    function validate() {
+      let ok = true;
+      const v = (id, msg) => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          document.getElementById('err-' + id).textContent = msg;
+          ok = false;
+        }
+      };
+      v('nome', 'Informe seu nome.');
+      v('cidade', 'Informe a cidade do imóvel.');
+      v('tipo', 'Selecione o tipo de imóvel.');
+      v('situacao', 'Selecione sua situação.');
+
+      const email = document.getElementById('email').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('err-email').textContent = 'Informe um e-mail válido.';
+        ok = false;
+      }
+
+      const wpp = document.getElementById('whatsapp').value.trim();
+      if (!wpp || wpp.replace(/\D/g,'').length < 10) {
+        document.getElementById('err-whatsapp').textContent = 'Informe um WhatsApp válido.';
+        ok = false;
+      }
+
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+      if (!validate()) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+
+      const payload = {
+        nome:      document.getElementById('nome').value.trim(),
+        email:     document.getElementById('email').value.trim(),
+        whatsapp:  document.getElementById('whatsapp').value.trim(),
+        cidade:    document.getElementById('cidade').value.trim(),
+        tipo:      document.getElementById('tipo').value,
+        situacao:  document.getElementById('situacao').value,
+        mensagem:  document.getElementById('mensagem').value.trim() || null,
+        origem:    'analise-gratuita',
+        status:    'novo',
+      };
+
+      const { error } = await supabase.from('leads').insert(payload);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        btn.disabled = false;
+        btn.textContent = 'Quero minha análise gratuita';
+        alert('Ocorreu um erro ao enviar. Por favor tente novamente ou entre em contato via WhatsApp.');
+        return;
+      }
+
+      // Show success
+      form.style.display = 'none';
+      document.getElementById('success-nome').textContent = payload.nome.split(' ')[0];
+      document.getElementById('success-state').style.display = 'block';
+    });
+
+    // WhatsApp mask
+    document.getElementById('whatsapp').addEventListener('input', function () {
+      let v = this.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length >= 7) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+      else if (v.length >= 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+      else if (v.length > 0) v = '(' + v;
+      this.value = v;
+    });
+  </script>
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Análise Gratuita de Rentabilidade | Dália Stays",
+    "url": "https://daliastays.com/analise-gratuita.html",
+    "description": "Solicite uma análise gratuita de rentabilidade para seu imóvel de temporada. Avaliamos diária média, ocupação estimada e renda mensal potencial.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Dália Stays",
+      "url": "https://daliastays.com/"
+    },
+    "mainEntity": {
+      "@type": "ContactPage",
+      "name": "Formulário de Análise Gratuita",
+      "description": "Formulário para solicitar análise gratuita de rentabilidade de imóvel por temporada"
+    }
+  }
+  </script>
+</body>
+</html>
