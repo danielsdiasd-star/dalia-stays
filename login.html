@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — Dália Stays</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:      #C9A84C;
+      --gold-dark: #A8893A;
+      --green:     #1A2E2A;
+      --off-white: #F8F5EF;
+      --white:     #FFFFFF;
+      --gray:      #6B7280;
+      --gray-lt:   #E5E0D8;
+      --red:       #DC4C4C;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--sans);
+      background: var(--green);
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Fundo decorativo */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      bottom: -150px; left: -100px;
+      pointer-events: none;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 2.75rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Logo */
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px; height: 52px;
+      background: var(--green);
+      border-radius: 14px;
+      margin-bottom: 0.85rem;
+    }
+
+    .logo-mark svg { width: 26px; height: 26px; stroke: var(--gold); fill: none; }
+
+    .logo-name {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--green);
+      letter-spacing: 0.02em;
+    }
+
+    .logo-sub {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 0.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Form */
+    .form-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--green);
+      margin-bottom: 0.3rem;
+    }
+
+    .form-sub {
+      font-size: 0.82rem;
+      color: var(--gray);
+      margin-bottom: 1.75rem;
+    }
+
+    .field {
+      margin-bottom: 1.1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--green);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--gray-lt);
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--green);
+      background: var(--off-white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+      background: var(--white);
+    }
+
+    input::placeholder { color: #B0A89A; }
+
+    .btn-login {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--green);
+      color: var(--gold);
+      border: none;
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-login:hover { background: #243E39; }
+    .btn-login:active { transform: scale(0.99); }
+    .btn-login:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+    .spinner-btn {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(201,168,76,0.3);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .forgot {
+      text-align: right;
+      margin-top: 0.5rem;
+    }
+
+    .forgot a {
+      font-size: 0.78rem;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .forgot a:hover { color: var(--gold-dark); }
+
+    /* Erro */
+    .alert {
+      display: none;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .alert.error {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(220,76,76,0.08);
+      color: var(--red);
+      border: 1px solid rgba(220,76,76,0.2);
+    }
+
+    .alert.success {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(42,140,116,0.08);
+      color: #2A8C74;
+      border: 1px solid rgba(42,140,116,0.2);
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+
+    .divider hr { flex: 1; border: none; border-top: 1px solid var(--gray-lt); }
+    .divider span { font-size: 0.75rem; color: var(--gray); white-space: nowrap; }
+
+    .link-cadastro {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--gray);
+    }
+
+    .link-cadastro a {
+      color: var(--gold-dark);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .link-cadastro a:hover { color: var(--green); }
+
+    /* Reset password view */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--gray);
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      margin-bottom: 1.25rem;
+      font-family: var(--sans);
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--green); }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- VIEW: LOGIN -->
+  <div class="view active" id="view-login">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg stroke-width="1.75" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="logo-name">Dália Stays</div>
+      <div class="logo-sub">Área do Proprietário</div>
+    </div>
+
+    <div class="form-title">Bem-vindo de volta</div>
+    <div class="form-sub">Acesse seu painel de gestão</div>
+
+    <div class="alert" id="login-alert"></div>
+
+    <form id="form-login" autocomplete="on">
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" placeholder="seu@email.com" required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <div class="forgot">
+        <a href="#" id="link-esqueci">Esqueci minha senha</a>
+      </div>
+      <button type="submit" class="btn-login" id="btn-login">
+        Entrar
+      </button>
+    </form>
+
+    <div class="divider"><hr /><span>ou</span><hr /></div>
+
+    <div class="link-cadastro">
+      Ainda não tem conta? <a href="/cadastro.html">Criar conta</a>
+    </div>
+  </div>
+
+  <!-- VIEW: ESQUECI SENHA -->
+  <div class="view" id="view-reset">
+    <button class="back-link" id="btn-voltar">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar ao login
+    </button>
+
+    <div class="logo">
+      <div class="logo-name" style="font-size:1.3rem;">Recuperar senha</div>
+    </div>
+
+    <div class="form-sub" style="margin-bottom:1.25rem;">
+      Informe seu e-mail e enviaremos um link para redefinir sua senha.
+    </div>
+
+    <div class="alert" id="reset-alert"></div>
+
+    <form id="form-reset">
+      <div class="field">
+        <label for="reset-email">E-mail</label>
+        <input type="email" id="reset-email" placeholder="seu@email.com" required />
+      </div>
+      <button type="submit" class="btn-login" id="btn-reset">
+        Enviar link de recuperação
+      </button>
+    </form>
+  </div>
+
+</div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://iickvzkkradmmwncogru.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_wxVKHpOV4-IYjLFSQxfiBw_JJ6Cohn6';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Redirecionar se já está logado
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    window.location.href = '/painel-proprietario.html';
+  }
+
+  // ── Utilitários ──
+  function setLoading(btn, spinner, loading) {
+    btn.disabled = loading;
+    btn.innerHTML = loading
+      ? `<div class="${spinner}"></div>`
+      : btn.dataset.label;
+  }
+
+  function showAlert(el, msg, type = 'error') {
+    el.textContent = msg;
+    el.className = `alert ${type}`;
+  }
+
+  function hideAlert(el) {
+    el.className = 'alert';
+  }
+
+  // ── Guardar label original ──
+  const btnLogin = document.getElementById('btn-login');
+  const btnReset = document.getElementById('btn-reset');
+  btnLogin.dataset.label = 'Entrar';
+  btnReset.dataset.label = 'Enviar link de recuperação';
+
+  // ── LOGIN ──
+  document.getElementById('form-login').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertEl = document.getElementById('login-alert');
+    hideAlert(alertEl);
+
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value;
+
+    btnLogin.disabled = true;
+    btnLogin.innerHTML = '<div class="spinner-btn"></div>';
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+
+    if (error) {
+      btnLogin.disabled = false;
+      btnLogin.textContent = 'Entrar';
+      showAlert(alertEl, 'E-mail ou senha incorretos. Tente novamente.');
+    } else {
+      window.location.href = '/painel-proprietario.html';
+    }
+  });
+
+  // ── ESQUECI SENHA ──
+  document.getElementById('link-esqueci').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('view-login').classList.remove('active');
+    document.getElementById('view-reset').classList.add('active');
+    // Pré-preencher email se já digitado
+    const email = document.getElementById('email').value;
+    if (email) document.getElementById('reset-email').value = email;
+  });
+
+  document.getElementById('btn-voltar').addEventListener('click', () => {
+    document.getElementById('view-reset').classList.remove('active');
+    document.getElementById('view-login').classList.add('active');
+    document.getElementById('reset-alert').className = 'alert';
+  });
+
+  document.getElementById('form-reset').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertEl = document.getElementById('reset-alert');
+    const email = document.getElementById('reset-email').value.trim();
+
+    btnReset.disabled = true;
+    btnReset.innerHTML = '<div class="spinner-btn"></div>';
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/update-password.html`
+    });
+
+    btnReset.disabled = false;
+    btnReset.textContent = 'Enviar link de recuperação';
+
+    if (error) {
+      showAlert(alertEl, 'Erro ao enviar e-mail. Verifique o endereço informado.');
+    } else {
+      showAlert(alertEl, 'Link enviado! Verifique sua caixa de entrada.', 'success');
+    }
+  });
+</script>
+</body>
+</html>

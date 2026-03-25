@@ -13,6 +13,10 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+  <!-- jsPDF + html2canvas (Fase 3 — Relatório PDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -205,6 +209,85 @@
       font-size: 0.8rem;
       color: var(--gray);
     }
+
+    /* ── Toggle fonte de dados ── */
+    .source-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--gray-lighter);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .source-btn {
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--gray);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .source-btn.active {
+      background: var(--green);
+      color: var(--gold);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+
+    .source-btn:not(.active):hover {
+      color: var(--green);
+    }
+
+    /* Badge AO VIVO */
+    .badge-live {
+      display: none;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(42,140,116,0.12);
+      color: var(--teal);
+      border: 1px solid rgba(42,140,116,0.3);
+      border-radius: 20px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      animation: livePulse 2s ease-in-out infinite;
+    }
+
+    .badge-live.visible { display: flex; }
+
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.65; }
+    }
+
+    /* Toast de notificação */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      padding: 0.75rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #fff;
+      background: var(--green);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 9999;
+      transform: translateY(0);
+      opacity: 1;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .toast.error { background: var(--red); }
+    .toast.hiding { opacity: 0; transform: translateY(8px); }
 
     .badge-plano {
       padding: 0.25rem 0.75rem;
@@ -651,6 +734,74 @@
     }
 
     .sidebar-overlay.visible { display: block; }
+
+    /* ── MODAL PDF ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+    }
+    .modal-card h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: var(--green);
+      margin-bottom: 0.3rem;
+    }
+    .modal-card p { font-size: 0.82rem; color: var(--gray); margin-bottom: 1.25rem; }
+    .modal-select {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      color: var(--text);
+      background: var(--off-white);
+      outline: none;
+      margin-bottom: 1.25rem;
+      cursor: pointer;
+    }
+    .modal-select:focus { border-color: var(--gold); }
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+    .modal-btn-cancel {
+      padding: 0.55rem 1.1rem;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      color: var(--gray);
+      background: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .modal-btn-cancel:hover { border-color: var(--gray); }
+    .modal-btn-confirm {
+      padding: 0.55rem 1.25rem;
+      background: var(--green);
+      color: var(--gold);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .modal-btn-confirm:hover { background: #243E39; }
+    .modal-btn-confirm:disabled { opacity: 0.65; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -719,6 +870,20 @@
     <div class="topbar-right">
       <span class="topbar-date" id="topbar-date"></span>
       <span class="badge-plano badge" id="badge-plano">profissional</span>
+      <!-- Toggle fonte de dados -->
+      <div class="source-toggle" id="source-toggle">
+        <button class="source-btn active" id="btn-src-manual" title="Dados do Supabase (manual)">Manual</button>
+        <button class="source-btn" id="btn-src-stays" title="Dados em tempo real do Stays.net">Stays.net</button>
+      </div>
+      <span class="badge-live" id="badge-live">● AO VIVO</span>
+      <button id="btn-pdf" style="display:flex;align-items:center;gap:0.4rem;padding:0.4rem 0.85rem;border:1.5px solid var(--gold);border-radius:8px;font-size:0.78rem;font-weight:600;color:var(--gold-dark);background:rgba(201,168,76,0.08);cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,168,76,0.16)'" onmouseout="this.style.background='rgba(201,168,76,0.08)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span id="btn-pdf-label">Baixar Relatório PDF</span>
+      </button>
+      <button id="btn-logout" style="display:flex;align-items:center;gap:0.4rem;padding:0.4rem 0.85rem;border:1.5px solid var(--gray-light);border-radius:8px;font-size:0.78rem;font-weight:500;color:var(--gray);background:none;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--gray-light)';this.style.color='var(--gray)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
     </div>
   </div>
 
@@ -932,15 +1097,28 @@
   </div><!-- /content -->
 </main>
 
+<!-- Modal: seletor de mês para PDF -->
+<div class="modal-overlay" id="modal-pdf">
+  <div class="modal-card">
+    <h3>Selecionar Período</h3>
+    <p>Escolha o mês de referência do relatório PDF</p>
+    <select class="modal-select" id="modal-mes-sel"></select>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" id="modal-cancelar">Cancelar</button>
+      <button class="modal-btn-confirm" id="modal-confirmar">
+        <span id="modal-confirmar-label">Gerar PDF</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  import { getListings, getReservations, normalizeListings, normalizeReservations } from './stays-api.js';
 
-  const SUPABASE_URL = 'https://wneijebgjzmgixvdqpa.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_S6CcjLcaraiXPSI7TYLHQA_ZQLLJG1_';
+  const SUPABASE_URL = 'https://iickvzkkradmmwncogru.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_wxVKHpOV4-IYjLFSQxfiBw_JJ6Cohn6';
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // Demo: Carlos Eduardo Mendes (Rio de Janeiro, Profissional)
-  const PROP_ID = '00000000-0000-0000-0000-000000000001';
 
   const MESES_PT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -972,29 +1150,97 @@
   }
 
   // ──────────────────────────────────────────────
+  // CALCULAR KPIs — função única reutilizada no dashboard E no PDF
+  // mesRef: string 'YYYY-MM'
+  // ──────────────────────────────────────────────
+  function calculateKPIs(reservas, imoveis, mesRef) {
+    const [ano, mes] = mesRef.split('-').map(Number);
+    // BUG 3: dias disponíveis = dias do mês × número de imóveis ativos
+    const diasMes = new Date(ano, mes, 0).getDate();
+    const noitesDisponiveis = imoveis.length * diasMes;
+
+    // Filtro T12:00:00 para evitar offset UTC em fusos negativos
+    const reservasMes = reservas.filter(r => {
+      const d = new Date(r.checkin + 'T12:00:00');
+      return d.getMonth() + 1 === mes && d.getFullYear() === ano;
+    });
+    // Reservas ativas = reservas do mês com status diferente de 'cancelada'
+    const reservasAtivas = reservasMes.filter(r => r.status !== 'cancelada');
+
+    // BUG 5: repasse direto do banco, nunca recalculado
+    const receitaBruta  = reservasMes.reduce((s, r) => s + (+r.valor_total           || 0), 0);
+    const repasse       = reservasMes.reduce((s, r) => s + (+r.repasse_proprietario  || 0), 0);
+    const comissao      = reservasMes.reduce((s, r) => s + (+r.comissao_dalia        || 0), 0);
+    // BUG 3+4: noites ocupadas → base para ocupação E ADR
+    const noitesOcupadas = reservasMes.reduce((s, r) => s + (+r.noites || 0), 0);
+    // BUG 3: ocupação = noites ocupadas / (dias do mês × nº imóveis) × 100
+    const ocupacao = noitesDisponiveis > 0 ? (noitesOcupadas / noitesDisponiveis * 100) : 0;
+    // BUG 4: ADR = receita bruta / noites ocupadas (não por nº de reservas)
+    const adr = noitesOcupadas > 0 ? receitaBruta / noitesOcupadas : 0;
+
+    return {
+      reservasMes,
+      reservasAtivas: reservasAtivas.length,
+      receitaBruta,
+      repasse,
+      comissao,
+      noitesOcupadas,
+      noitesDisponiveis,
+      ocupacao,
+      adr,
+    };
+  }
+
+  // ──────────────────────────────────────────────
   // LOAD DATA
   // ──────────────────────────────────────────────
   let allImoveis = [];
   let allReservas = [];
 
   async function carregarDados() {
-    // 1. Proprietário
-    const { data: prop } = await supabase
-      .from('proprietarios')
-      .select('*')
-      .eq('id', PROP_ID)
-      .single();
-
-    if (prop) {
-      const initials = prop.nome.split(' ').slice(0,2).map(n => n[0]).join('');
-      document.getElementById('prop-avatar').textContent = initials;
-      document.getElementById('prop-nome').textContent = prop.nome;
-      document.getElementById('prop-plano').textContent = prop.plano;
-      document.getElementById('badge-plano').textContent = prop.plano;
-      document.getElementById('badge-plano').className = `badge badge-${prop.plano}`;
+    // 1. Verificar sessão autenticada
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      window.location.href = '/login.html';
+      return { prop: null, imoveis: [], reservas: [] };
     }
 
-    // 2. Imóveis
+    // 2. Buscar proprietário pelo user_id autenticado
+    const { data: prop, error: propError } = await supabase
+      .from('proprietarios')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    if (propError || !prop) {
+      // Novo cadastro sem perfil ainda: tenta criar automaticamente
+      document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#F8F5EF;color:#1A2E2A;font-size:1rem;">Configurando seu perfil...</div>`;
+      const nomePerfil = user.user_metadata?.nome || user.email?.split('@')[0] || 'Usuário';
+      const { error: insErr } = await supabase.from('proprietarios').insert({
+        user_id: user.id,
+        nome: nomePerfil,
+        email: user.email,
+        plano: 'basico',
+        ativo: true
+      });
+      if (insErr) {
+        window.location.href = '/login.html';
+      } else {
+        window.location.reload();
+      }
+      return { prop: null, imoveis: [], reservas: [] };
+    }
+
+    const PROP_ID = prop.id;
+
+    const initials = prop.nome.split(' ').slice(0,2).map(n => n[0]).join('');
+    document.getElementById('prop-avatar').textContent = initials;
+    document.getElementById('prop-nome').textContent = prop.nome;
+    document.getElementById('prop-plano').textContent = prop.plano;
+    document.getElementById('badge-plano').textContent = prop.plano;
+    document.getElementById('badge-plano').className = `badge badge-${prop.plano}`;
+
+    // 3. Imóveis
     const { data: imoveis } = await supabase
       .from('imoveis')
       .select('*')
@@ -1003,7 +1249,7 @@
 
     allImoveis = imoveis || [];
 
-    // 3. Reservas (últimos 3 meses)
+    // 4. Reservas (últimos 3 meses)
     const tresMesesAtras = new Date();
     tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
     const desde = tresMesesAtras.toISOString().split('T')[0];
@@ -1027,15 +1273,9 @@
     const hoje = new Date();
     const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
 
-    const reservasMes = reservas.filter(r => r.checkin.startsWith(mesAtual));
-    const reservasAtivas = reservas.filter(r => ['confirmada','checkin_feito'].includes(r.status));
-
-    const receitaBruta = reservasMes.reduce((s, r) => s + (+r.valor_total || 0), 0);
-    const repasse = reservasMes.reduce((s, r) => s + (+r.repasse_proprietario || 0), 0);
-    const noitesOcupadas = reservasMes.reduce((s, r) => s + (+r.noites || 0), 0);
-    const noitesDisponiveis = imoveis.length * new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate();
-    const ocupacao = noitesDisponiveis > 0 ? (noitesOcupadas / noitesDisponiveis * 100) : 0;
-    const adr = noitesOcupadas > 0 ? receitaBruta / noitesOcupadas : 0;
+    // BUG 2: usar calculateKPIs para garantir lógica idêntica ao PDF
+    const kpis = calculateKPIs(reservas, imoveis, mesAtual);
+    const { reservasMes, receitaBruta, repasse, ocupacao, adr } = kpis;
 
     document.getElementById('dash-sub').textContent =
       `${MESES_FULL[hoje.getMonth()]} ${hoje.getFullYear()} · ${imoveis.length} imóveis ativos`;
@@ -1043,7 +1283,7 @@
     document.getElementById('kpi-receita').textContent = fmt(receitaBruta);
     document.getElementById('kpi-ocupacao').textContent = `${ocupacao.toFixed(1)}%`;
     document.getElementById('kpi-adr').textContent = fmt(adr);
-    document.getElementById('kpi-reservas').textContent = reservasAtivas.length;
+    document.getElementById('kpi-reservas').textContent = kpis.reservasAtivas;
     document.getElementById('kpi-repasse').textContent = fmt(repasse);
 
     // Próximos 7 dias
@@ -1122,15 +1362,18 @@
       });
     }
 
-    const bruto = meses.map(m =>
-      reservas.filter(r => r.checkin.startsWith(m.key)).reduce((s,r) => s + (+r.valor_total||0), 0)
-    );
-    const liquido = meses.map(m =>
-      reservas.filter(r => r.checkin.startsWith(m.key)).reduce((s,r) => s + (+r.repasse_proprietario||0), 0)
-    );
+    const bruto = meses.map(m => {
+      const [my, mm] = m.key.split('-').map(Number);
+      return reservas.filter(r => { const d = new Date(r.checkin + 'T12:00:00'); return d.getFullYear() === my && d.getMonth() + 1 === mm; }).reduce((s,r) => s + (+r.valor_total||0), 0);
+    });
+    const liquido = meses.map(m => {
+      const [my, mm] = m.key.split('-').map(Number);
+      return reservas.filter(r => { const d = new Date(r.checkin + 'T12:00:00'); return d.getFullYear() === my && d.getMonth() + 1 === mm; }).reduce((s,r) => s + (+r.repasse_proprietario||0), 0);
+    });
 
     const ctx = document.getElementById('chart-financeiro').getContext('2d');
-    new Chart(ctx, {
+    if (window.chartInstance) { window.chartInstance.destroy(); }
+    window.chartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: meses.map(m => m.label),
@@ -1206,8 +1449,9 @@
     }
 
     lista.innerHTML = imoveis.map(im => {
+      const [mAno, mMes] = mesAtual.split('-').map(Number);
       const receitaMes = reservas
-        .filter(r => r.imovel_id === im.id && r.checkin.startsWith(mesAtual))
+        .filter(r => { const d = new Date(r.checkin + 'T12:00:00'); return r.imovel_id === im.id && d.getFullYear() === mAno && d.getMonth() + 1 === mMes; })
         .reduce((s,r) => s + (+r.valor_total||0), 0);
 
       const plataformasBadges = (im.plataformas || []).map(p => `<span class="badge badge-${p}">${p.charAt(0).toUpperCase()+p.slice(1)}</span>`).join('');
@@ -1351,10 +1595,651 @@
     document.getElementById('sidebar-overlay').classList.remove('visible');
   });
 
+  // ──────────────────────────────────────────────
+  // FASE 3 — GERAÇÃO DE RELATÓRIO PDF
+  // ──────────────────────────────────────────────
+  // mes = inteiro 1–12, ano = inteiro ex. 2026
+  async function gerarPDF(mes, ano) {
+    try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const W = 210, H = 297, M = 18;
+    const C_GREEN    = [26, 46, 42];
+    const C_GOLD     = [201, 168, 76];
+    const C_OFFWHITE = [248, 245, 239];
+    const C_WHITE    = [255, 255, 255];
+    const C_GRAY     = [107, 114, 128];
+    const C_GRAY_LT  = [229, 224, 216];
+    const C_DARK     = [26, 26, 26];
+    const C_TEAL     = [42, 140, 116];
+
+    // ── Verificar sessão ──
+    const { data: authData, error: authErr } = await supabase.auth.getUser();
+    if (authErr || !authData?.user) { window.location.href = '/login.html'; return; }
+    const user = authData.user;
+
+    // ── Buscar proprietário ──
+    const { data: prop, error: propErr } = await supabase
+      .from('proprietarios').select('*').eq('user_id', user.id).single();
+    if (propErr || !prop?.id) {
+      alert('Sessão expirada. Faça login novamente.');
+      window.location.href = '/login.html';
+      return;
+    }
+    const propId = prop.id;
+
+    // Mês de referência vem como inteiros (mes, ano) — sem new Date() para evitar
+    // ambiguidades de timezone. 'hoje' é usado APENAS para "Gerado em" na capa.
+    const hoje     = new Date();
+    const mesLabel = `${MESES_FULL[mes - 1]} de ${ano}`;
+    const mesStr   = String(mes).padStart(2, '0');
+
+    // Datas para query Supabase calculadas via Date local (não toISOString)
+    // para evitar o offset UTC que muda o dia em fusos negativos/positivos.
+    const d6    = new Date(ano, mes - 1 - 5, 1);
+    const desde = `${d6.getFullYear()}-${String(d6.getMonth() + 1).padStart(2,'0')}-01`;
+    const dFim  = new Date(ano, mes, 0);
+    const ate   = `${dFim.getFullYear()}-${String(dFim.getMonth() + 1).padStart(2,'0')}-${String(dFim.getDate()).padStart(2,'0')}`;
+
+    // ── Imóveis ──
+    const { data: imoveisData, error: imoveisErr } = await supabase
+      .from('imoveis')
+      .select('*')
+      .eq('proprietario_id', propId)
+      .eq('ativo', true);
+    if (imoveisErr) throw new Error(`Erro ao buscar imóveis: ${imoveisErr.message}`);
+    const imoveis = imoveisData || [];
+
+    // ── Reservas (janela de 6 meses até o mês selecionado) ──
+    const { data: reservasRaw, error: reservasErr } = await supabase
+      .from('reservas')
+      .select('*, imoveis(nome, cidade)')
+      .eq('proprietario_id', propId)
+      .gte('checkin', desde)
+      .lte('checkin', ate)
+      .order('checkin', { ascending: false });
+    if (reservasErr) throw new Error(`Erro ao buscar reservas: ${reservasErr.message}`);
+
+    // Deduplicação em duas camadas:
+    // 1ª: por id (duplicatas de join FK)
+    // 2ª: por chave lógica (seed inserido múltiplas vezes)
+    const porId = new Map((reservasRaw || []).map(r => [r.id, r]));
+    const reservas = [...new Map(
+      [...porId.values()].map(r => [
+        `${r.imovel_id}|${r.checkin}|${r.checkout}|${r.nome_hospede}`,
+        r
+      ])
+    ).values()];
+
+    // Filtro explícito com 'T12:00:00' (meio-dia local) para evitar que datas
+    // no dia 1 do mês sejam deslocadas para o mês anterior em fusos UTC-.
+    const reservasMes = reservas.filter(r => {
+      const d = new Date(r.checkin + 'T12:00:00');
+      return d.getMonth() + 1 === mes && d.getFullYear() === ano;
+    });
+
+    // KPIs calculados inline com o mesmo filtro acima
+    const diasMes        = new Date(ano, mes, 0).getDate();
+    const noitesDisp     = imoveis.length * diasMes;
+    const receitaBruta   = reservasMes.reduce((s, r) => s + (+r.valor_total           || 0), 0);
+    const repasse        = reservasMes.reduce((s, r) => s + (+r.repasse_proprietario  || 0), 0);
+    const comissao       = reservasMes.reduce((s, r) => s + (+r.comissao_dalia        || 0), 0);
+    const noitesOcupadas = reservasMes.reduce((s, r) => s + (+r.noites               || 0), 0);
+    const ocupacao       = noitesDisp > 0 ? (noitesOcupadas / noitesDisp * 100) : 0;
+    const adr            = noitesOcupadas > 0 ? receitaBruta / noitesOcupadas : 0;
+    const reservasAtivas = reservas.filter(r =>
+      ['confirmada', 'checkin_feito'].includes(r.status)
+    ).length;
+
+    // ── Utilitários PDF ──
+    function rodape(pag) {
+      doc.setFontSize(7.5);
+      doc.setTextColor(...C_GRAY);
+      doc.text('Dália Stays — Gestão Profissional de Imóveis — daliastays.com', W / 2, H - 9, { align: 'center' });
+      doc.setTextColor(...C_GRAY);
+      doc.text(String(pag), W - M, H - 9, { align: 'right' });
+    }
+
+    function cabecalhoSecao(titulo, subtitulo) {
+      doc.setFillColor(...C_GREEN);
+      doc.rect(0, 0, W, 22, 'F');
+      doc.setFillColor(...C_GOLD);
+      doc.rect(0, 22, W, 1.5, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.setTextColor(...C_GOLD);
+      doc.text('Dália Stays', M, 13);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...C_WHITE);
+      doc.text(subtitulo, W - M, 13, { align: 'right' });
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(15);
+      doc.setTextColor(...C_GREEN);
+      doc.text(titulo, M, 34);
+      doc.setFillColor(...C_GOLD);
+      doc.rect(M, 36, 18, 1, 'F');
+    }
+
+    function kpiBox(x, y, w, h, label, valor, cor) {
+      doc.setFillColor(...C_OFFWHITE);
+      doc.rect(x, y, w, h, 'F');
+      doc.setFillColor(...cor);
+      doc.rect(x, y, w, 1.5, 'F');
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...C_GRAY);
+      doc.text(label.toUpperCase(), x + 5, y + 9);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...C_GREEN);
+      doc.text(valor, x + 5, y + 19);
+    }
+
+    // ══════════════════════════════
+    // CAPA
+    // ══════════════════════════════
+    doc.setFillColor(...C_GREEN);
+    doc.rect(0, 0, W, H, 'F');
+
+    // Decoração geométrica
+    doc.setFillColor(255, 255, 255, 0.03);
+    doc.setDrawColor(...C_GOLD);
+    doc.setLineWidth(0.3);
+    doc.circle(W - 30, 40, 60);
+    doc.circle(W - 30, 40, 42);
+    doc.circle(30, H - 40, 45);
+
+    // Linha dourada central
+    doc.setFillColor(...C_GOLD);
+    doc.rect(0, H / 2 - 1, W, 1.5, 'F');
+
+    // Logo
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(42);
+    doc.setTextColor(...C_GOLD);
+    doc.text('Dália Stays', W / 2, H / 2 - 38, { align: 'center' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(...C_WHITE);
+    doc.setCharSpace(3);
+    doc.text('RELATÓRIO DE DESEMPENHO', W / 2, H / 2 - 26, { align: 'center' });
+    doc.setCharSpace(0);
+
+    // Linha separadora
+    doc.setDrawColor(...C_GOLD);
+    doc.setLineWidth(0.5);
+    doc.line(W / 2 - 30, H / 2 + 6, W / 2 + 30, H / 2 + 6);
+
+    // Proprietário
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(...C_GOLD);
+    doc.text(prop.nome, W / 2, H / 2 + 20, { align: 'center' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.setTextColor(...C_WHITE);
+    // BUG 6: mês de referência vem do seletor
+    doc.text(mesLabel, W / 2, H / 2 + 32, { align: 'center' });
+
+    doc.setFontSize(8.5);
+    doc.setTextColor(...C_GOLD);
+    doc.text(
+      `Gerado em ${hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}`,
+      W / 2, H / 2 + 48, { align: 'center' }
+    );
+
+    // Plano
+    const planoLabel = { basico: 'Plano Básico', profissional: 'Plano Profissional', premium: 'Plano Premium' };
+    doc.setFontSize(8);
+    doc.setTextColor(...C_GRAY);
+    doc.text(planoLabel[prop.plano] || prop.plano, W / 2, H / 2 + 57, { align: 'center' });
+
+    rodape(1);
+
+    // ══════════════════════════════
+    // PÁGINA 1 — KPIs
+    // ══════════════════════════════
+    doc.addPage();
+    // BUG 6: cabeçalho usa mesLabel (mês selecionado)
+    cabecalhoSecao('Indicadores do Mês', mesLabel);
+
+    // BUG 2: usar valores já calculados por calculateKPIs (mesmos do dashboard)
+    const kpisCards = [
+      { label: 'Receita Bruta',     valor: fmt(receitaBruta),          cor: C_GOLD  },
+      { label: 'Repasse Líquido',   valor: fmt(repasse),               cor: C_TEAL  },
+      { label: 'Taxa de Ocupação',  valor: `${ocupacao.toFixed(1)}%`,  cor: C_GREEN },
+      { label: 'Diária Média (ADR)',valor: fmt(adr),                   cor: C_GOLD  },
+      { label: 'Reservas Ativas',   valor: String(reservasAtivas),     cor: C_GREEN },
+      { label: 'Comissão Dália',    valor: fmt(comissao),              cor: C_GRAY  },
+    ];
+
+    const bw = (W - M * 2 - 8) / 3;
+    const bh = 30;
+    kpisCards.forEach((k, i) => {
+      const col = i % 3;
+      const row = Math.floor(i / 3);
+      kpiBox(M + col * (bw + 4), 44 + row * (bh + 6), bw, bh, k.label, k.valor, k.cor);
+    });
+
+    // Resumo imóveis
+    let cy = 44 + 2 * (bh + 6) + 10;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...C_GREEN);
+    doc.text('Portfólio de Imóveis', M, cy);
+    doc.setFillColor(...C_GOLD);
+    doc.rect(M, cy + 2, 14, 0.8, 'F');
+    cy += 10;
+
+    (imoveis || []).forEach(im => {
+      const recIm = reservasMes.filter(r => r.imovel_id === im.id).reduce((s, r) => s + (+r.valor_total || 0), 0);
+      doc.setFillColor(...C_OFFWHITE);
+      doc.rect(M, cy, W - M * 2, 12, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...C_DARK);
+      doc.text(im.nome, M + 4, cy + 5.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(...C_GRAY);
+      doc.text(`${im.cidade}, ${im.estado} · ${im.quartos} quartos · ${im.capacidade} hóspedes`, M + 4, cy + 10);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...C_GREEN);
+      doc.text(fmt(recIm), W - M - 4, cy + 5.5, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...C_GRAY);
+      doc.text('receita do mês', W - M - 4, cy + 10, { align: 'right' });
+      cy += 15;
+    });
+
+    rodape(2);
+
+    // ══════════════════════════════
+    // PÁGINA 2 — RESERVAS DO MÊS
+    // ══════════════════════════════
+    doc.addPage();
+    cabecalhoSecao('Reservas do Mês', `${reservasMes.length} reserva(s) em ${mesLabel}`);
+
+    if (reservasMes.length === 0) {
+      doc.setFontSize(10);
+      doc.setTextColor(...C_GRAY);
+      doc.text('Nenhuma reserva registrada neste mês.', M, 50);
+    } else {
+      // Cabeçalho da tabela
+      const cols = [
+        { label: 'Hóspede',    x: M,        w: 42 },
+        { label: 'Imóvel',     x: M + 42,   w: 38 },
+        { label: 'Check-in',   x: M + 80,   w: 22 },
+        { label: 'Check-out',  x: M + 102,  w: 22 },
+        { label: 'Noites',     x: M + 124,  w: 14 },
+        { label: 'Plataforma', x: M + 138,  w: 22 },
+        { label: 'Valor Total',x: M + 160,  w: 32 },
+      ];
+
+      let ty = 44;
+      const rowH = 9;
+
+      // Header row
+      doc.setFillColor(...C_GREEN);
+      doc.rect(M, ty, W - M * 2, rowH, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7);
+      doc.setTextColor(...C_GOLD);
+      cols.forEach(c => doc.text(c.label.toUpperCase(), c.x + 2, ty + 6));
+      ty += rowH;
+
+      const plataformaLabel = { airbnb: 'Airbnb', booking: 'Booking', vrbo: 'Vrbo', direto: 'Direto', outro: 'Outro' };
+      reservasMes.forEach((r, i) => {
+        if (ty > H - 25) {
+          rodape(doc.internal.getCurrentPageInfo().pageNumber);
+          doc.addPage();
+          // Re-draw header
+          doc.setFillColor(...C_GREEN);
+          doc.rect(M, 18, W - M * 2, rowH, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.setTextColor(...C_GOLD);
+          cols.forEach(c => doc.text(c.label.toUpperCase(), c.x + 2, 24));
+          ty = 18 + rowH;
+        }
+        doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 245, i % 2 === 0 ? 255 : 239);
+        doc.rect(M, ty, W - M * 2, rowH, 'F');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...C_DARK);
+
+        const vals = [
+          r.nome_hospede,
+          r.imoveis?.nome || '—',
+          fmtData(r.checkin),
+          fmtData(r.checkout),
+          String(r.noites ?? '—'),
+          plataformaLabel[r.plataforma] || r.plataforma,
+          fmt(r.valor_total),
+        ];
+        cols.forEach((c, ci) => {
+          const txt = doc.splitTextToSize(vals[ci], c.w - 3)[0] || '';
+          doc.text(txt, c.x + 2, ty + 6);
+        });
+        ty += rowH;
+      });
+
+      // Totais
+      ty += 3;
+      doc.setFillColor(...C_GREEN);
+      doc.rect(M, ty, W - M * 2, 10, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...C_GOLD);
+      doc.text('TOTAL DO MÊS', M + 2, ty + 7);
+      doc.text(fmt(receitaBruta), W - M - 4, ty + 7, { align: 'right' });
+      doc.setTextColor(...C_WHITE);
+      doc.text(`Repasse líquido: ${fmt(repasse)}`, W / 2, ty + 7, { align: 'center' });
+    }
+
+    rodape(3);
+
+    // ══════════════════════════════
+    // PÁGINA 3 — GRÁFICO DE EVOLUÇÃO
+    // ══════════════════════════════
+    doc.addPage();
+    cabecalhoSecao('Evolução Financeira', 'Últimos 6 meses');
+
+    // Calcular dados dos 6 meses
+    const meses6 = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(ano, mes - 1 - i, 1);
+      meses6.push({
+        key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+        label: `${MESES_PT[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`
+      });
+    }
+
+    const brutos  = meses6.map(m => { const [my,mm]=m.key.split('-').map(Number); return reservas.filter(r => { const d=new Date(r.checkin+'T12:00:00'); return d.getFullYear()===my && d.getMonth()+1===mm && r.proprietario_id===propId; }).reduce((s,r) => s+(+r.valor_total||0), 0); });
+    const liquidos= meses6.map(m => { const [my,mm]=m.key.split('-').map(Number); return reservas.filter(r => { const d=new Date(r.checkin+'T12:00:00'); return d.getFullYear()===my && d.getMonth()+1===mm && r.proprietario_id===propId; }).reduce((s,r) => s+(+r.repasse_proprietario||0), 0); });
+    const maxVal  = Math.max(...brutos, 1);
+
+    // Área do gráfico
+    const gx = M, gy = 46, gw = W - M * 2, gh = 100;
+    const barW = (gw - 20) / meses6.length / 2 - 3;
+    const barSpacing = (gw - 20) / meses6.length;
+
+    // Fundo
+    doc.setFillColor(...C_OFFWHITE);
+    doc.rect(gx, gy, gw, gh, 'F');
+
+    // Grid lines
+    doc.setDrawColor(...C_GRAY_LT);
+    doc.setLineWidth(0.3);
+    for (let g = 0; g <= 4; g++) {
+      const yy = gy + gh - (g / 4) * gh;
+      doc.line(gx + 18, yy, gx + gw, yy);
+      doc.setFontSize(6.5);
+      doc.setTextColor(...C_GRAY);
+      const labelVal = (maxVal * g / 4);
+      doc.text(`R$${(labelVal / 1000).toFixed(0)}k`, gx + 2, yy + 2);
+    }
+
+    // Barras
+    meses6.forEach((m, i) => {
+      const baseX = gx + 18 + i * barSpacing + 4;
+      const maxBarH = gh - 4;
+
+      const hBruto  = maxVal > 0 ? (brutos[i] / maxVal) * maxBarH : 0;
+      const hLiquid = maxVal > 0 ? (liquidos[i] / maxVal) * maxBarH : 0;
+
+      // Barra receita bruta (dourada)
+      doc.setFillColor(...C_GOLD);
+      doc.rect(baseX, gy + gh - hBruto - 2, barW, hBruto, 'F');
+
+      // Barra repasse (verde)
+      doc.setFillColor(...C_GREEN);
+      doc.rect(baseX + barW + 2, gy + gh - hLiquid - 2, barW, hLiquid, 'F');
+
+      // Label mês
+      doc.setFontSize(6.5);
+      doc.setTextColor(...C_GRAY);
+      doc.text(m.label, baseX + barW, gy + gh + 5, { align: 'center' });
+    });
+
+    // Legenda
+    const ly = gy + gh + 14;
+    doc.setFillColor(...C_GOLD);
+    doc.rect(M, ly, 8, 4, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...C_DARK);
+    doc.text('Receita Bruta', M + 10, ly + 3.5);
+
+    doc.setFillColor(...C_GREEN);
+    doc.rect(M + 52, ly, 8, 4, 'F');
+    doc.text('Repasse Líquido', M + 62, ly + 3.5);
+
+    // Tabela resumo mensal
+    cy = ly + 16;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...C_GREEN);
+    doc.text('Resumo Mensal', M, cy);
+    doc.setFillColor(...C_GOLD);
+    doc.rect(M, cy + 2, 14, 0.8, 'F');
+    cy += 10;
+
+    // Header
+    doc.setFillColor(...C_GREEN);
+    doc.rect(M, cy, W - M * 2, 8, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...C_GOLD);
+    doc.text('MÊS', M + 3, cy + 5.5);
+    doc.text('RESERVAS', M + 38, cy + 5.5);
+    doc.text('RECEITA BRUTA', M + 70, cy + 5.5);
+    doc.text('COMISSÃO DÁLIA', M + 110, cy + 5.5);
+    doc.text('REPASSE LÍQUIDO', M + 148, cy + 5.5);
+    cy += 8;
+
+    meses6.forEach((m, i) => {
+      const [rmy, rmm] = m.key.split('-').map(Number);
+      const resDoMes = reservas.filter(r => { const d = new Date(r.checkin + 'T12:00:00'); return d.getFullYear() === rmy && d.getMonth() + 1 === rmm && r.proprietario_id === propId; });
+      const brutoMes = resDoMes.reduce((s, r) => s + (+r.valor_total || 0), 0);
+      const comissaoMes = resDoMes.reduce((s, r) => s + (+r.comissao_dalia || 0), 0);
+      const repMes = resDoMes.reduce((s, r) => s + (+r.repasse_proprietario || 0), 0);
+
+      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 245, i % 2 === 0 ? 255 : 239);
+      doc.rect(M, cy, W - M * 2, 8, 'F');
+      doc.setFont('helvetica', i === 5 ? 'bold' : 'normal');
+      doc.setFontSize(7.5);
+      if (i === 5) { doc.setTextColor(...C_GREEN); } else { doc.setTextColor(...C_DARK); }
+      doc.text(`${MESES_PT[new Date(m.key + '-01').getMonth()]}/${new Date(m.key + '-01').getFullYear()}`, M + 3, cy + 5.5);
+      doc.text(String(resDoMes.length), M + 45, cy + 5.5);
+      doc.text(fmt(brutoMes), M + 70, cy + 5.5);
+      doc.text(fmt(comissaoMes), M + 110, cy + 5.5);
+      doc.setTextColor(...C_TEAL);
+      doc.text(fmt(repMes), M + 148, cy + 5.5);
+      cy += 8;
+    });
+
+    rodape(4);
+
+    // ── Download ──
+    const nomeArquivo = `Relatorio-DaliaStays-${prop.nome.split(' ').slice(0,2).join('')}-${MESES_FULL[mes - 1]}${ano}.pdf`;
+    doc.save(nomeArquivo);
+  } catch(err) {
+    console.error('Erro ao gerar PDF:', err);
+    alert('Erro ao gerar o relatório: ' + err.message);
+  }
+}
+
+  // ── Modal Seletor de Mês ──
+  (function() {
+    const modalOverlay  = document.getElementById('modal-pdf');
+    const modalSel      = document.getElementById('modal-mes-sel');
+    const btnCancelar   = document.getElementById('modal-cancelar');
+    const btnConfirmar  = document.getElementById('modal-confirmar');
+    const labelConfirm  = document.getElementById('modal-confirmar-label');
+
+    // Preencher select com os últimos 12 meses
+    function popularMeses() {
+      modalSel.innerHTML = '';
+      const hoje = new Date();
+      for (let i = 0; i < 12; i++) {
+        const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const label = `${MESES_FULL[d.getMonth()]} de ${d.getFullYear()}`;
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = label;
+        modalSel.appendChild(opt);
+      }
+    }
+
+    document.getElementById('btn-pdf').addEventListener('click', () => {
+      popularMeses();
+      modalOverlay.classList.add('visible');
+    });
+
+    btnCancelar.addEventListener('click', () => {
+      modalOverlay.classList.remove('visible');
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) modalOverlay.classList.remove('visible');
+    });
+
+    btnConfirmar.addEventListener('click', async () => {
+      const val = modalSel.value;                          // "YYYY-MM"
+      const ano = parseInt(val.split('-')[0], 10);
+      const mes = parseInt(val.split('-')[1], 10);
+      modalOverlay.classList.remove('visible');
+
+      const btn   = document.getElementById('btn-pdf');
+      const label = document.getElementById('btn-pdf-label');
+      btn.disabled = true;
+      label.textContent = 'Gerando PDF...';
+      try {
+        await gerarPDF(mes, ano);
+      } finally {
+        btn.disabled = false;
+        label.textContent = 'Baixar Relatório PDF';
+      }
+    });
+  })();
+
+  // Logout
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/login.html';
+  });
+
   // Data no topbar
   const hoje = new Date();
   document.getElementById('topbar-date').textContent =
     hoje.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // ──────────────────────────────────────────────
+  // TOAST HELPER
+  // ──────────────────────────────────────────────
+  function showToast(msg, type = 'info') {
+    const t = document.createElement('div');
+    t.className = `toast${type === 'error' ? ' error' : ''}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('hiding');
+      setTimeout(() => t.remove(), 450);
+    }, 3500);
+  }
+
+  // ──────────────────────────────────────────────
+  // CARREGAR DADOS STAYS.NET
+  // ──────────────────────────────────────────────
+  async function carregarDadosStays() {
+    // Janela de 6 meses para cobrir o gráfico
+    const hoje = new Date();
+    const d6AtrasObj = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+    const dateFrom = `${d6AtrasObj.getFullYear()}-${String(d6AtrasObj.getMonth()+1).padStart(2,'0')}-01`;
+    const dateTo   = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-${String(new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate()).padStart(2,'0')}`;
+
+    const [rawListings, rawReservations] = await Promise.all([
+      getListings(),
+      getReservations(dateFrom, dateTo),
+    ]);
+
+    const imoveis  = normalizeListings(rawListings);
+    const reservas = normalizeReservations(rawReservations, imoveis);
+
+    allImoveis  = imoveis;
+    allReservas = reservas;
+
+    return { imoveis, reservas };
+  }
+
+  // ──────────────────────────────────────────────
+  // TOGGLE FONTE DE DADOS
+  // ──────────────────────────────────────────────
+  let dataSource = 'supabase';
+
+  function setSource(source) {
+    dataSource = source;
+    const btnManual = document.getElementById('btn-src-manual');
+    const btnStays  = document.getElementById('btn-src-stays');
+    const badgeLive = document.getElementById('badge-live');
+
+    if (source === 'stays') {
+      btnManual.classList.remove('active');
+      btnStays.classList.add('active');
+      badgeLive.classList.add('visible');
+    } else {
+      btnStays.classList.remove('active');
+      btnManual.classList.add('active');
+      badgeLive.classList.remove('visible');
+    }
+  }
+
+  async function reloadWithSource(source) {
+    const loading = document.createElement('div');
+    loading.id = 'source-loading';
+    loading.style.cssText = 'position:fixed;inset:0;background:rgba(248,245,239,0.7);display:flex;align-items:center;justify-content:center;z-index:500;';
+    loading.innerHTML = '<div style="width:36px;height:36px;border:3px solid rgba(26,46,42,0.15);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;"></div>';
+    document.body.appendChild(loading);
+
+    try {
+      let imoveis, reservas;
+      if (source === 'stays') {
+        ({ imoveis, reservas } = await carregarDadosStays());
+        setSource('stays');
+        showToast('Dados carregados do Stays.net ● AO VIVO');
+      } else {
+        ({ imoveis, reservas } = await carregarDados());
+        setSource('supabase');
+        showToast('Dados carregados do Supabase (manual)');
+      }
+      renderDashboard(imoveis, reservas);
+      renderImoveis(imoveis, reservas);
+      renderReservas(reservas, imoveis);
+      renderFinanceiro(reservas);
+    } catch (err) {
+      console.error('[toggle]', err);
+      // Reverter toggle se falhar
+      setSource(source === 'stays' ? 'supabase' : 'stays');
+      showToast(`Erro: ${err.message.slice(0, 80)} — revertendo fonte`, 'error');
+    } finally {
+      loading.remove();
+    }
+  }
+
+  document.getElementById('btn-src-manual').addEventListener('click', () => {
+    if (dataSource !== 'supabase') reloadWithSource('supabase');
+  });
+
+  document.getElementById('btn-src-stays').addEventListener('click', () => {
+    if (dataSource !== 'stays') reloadWithSource('stays');
+  });
 
   // ──────────────────────────────────────────────
   // INICIALIZAR
